@@ -4,7 +4,9 @@
       <div class="card shadow">
         <div class="card-body p-4">
           <h2 class="text-center mb-4">Create New Account</h2>
+
           <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+
             <div class="mb-3">
               <label for="name" class="form-label">Full Name</label>
               <input
@@ -15,8 +17,14 @@
                 [(ngModel)]="signupData.name"
                 required
                 placeholder="Enter your full name"
+                #name="ngModel"
               >
+              <small class="text-danger" *ngIf="name.invalid && name.touched">
+                Full name is required.
+              </small>
             </div>
+
+            
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input
@@ -26,9 +34,17 @@
                 name="email"
                 [(ngModel)]="signupData.email"
                 required
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                #email="ngModel"
                 placeholder="Enter your email"
               >
+      
+              <small class="text-danger" *ngIf="email.invalid && email.touched">
+                Please enter a valid email address.
+              </small>
             </div>
+
+          
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input
@@ -38,9 +54,17 @@
                 name="password"
                 [(ngModel)]="signupData.password"
                 required
+                pattern="^(?=.*[A-Z])(?=.*\d).{6,}$"
+                #password="ngModel"
                 placeholder="Enter your password"
               >
+             
+              <small class="text-danger" *ngIf="password.invalid && password.touched">
+                Password is not valid.
+              </small>
             </div>
+
+            
             <div class="mb-3">
               <label for="confirmPassword" class="form-label">Confirm Password</label>
               <input
@@ -51,15 +75,29 @@
                 [(ngModel)]="signupData.confirmPassword"
                 required
                 placeholder="Re-enter your password"
+                #confirmPassword="ngModel"
               >
+              <small class="text-danger" *ngIf="confirmPassword.invalid && confirmPassword.touched">
+                Please confirm your password.
+              </small>
+              <small class="text-danger" *ngIf="signupData.confirmPassword !== signupData.password && confirmPassword.touched">
+                Passwords do not match.
+              </small>
             </div>
+
+       
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid">Create Account</button>
+              <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid || signupData.password !== signupData.confirmPassword">
+                Create Account
+              </button>
             </div>
           </form>
+
+    
           <div class="text-center mt-3">
             <p>Already have an account? <a routerLink="/signin">Sign In</a></p>
           </div>
+
         </div>
       </div>
     </div>

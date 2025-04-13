@@ -5,6 +5,8 @@
         <div class="card-body p-4">
           <h2 class="text-center mb-4">Sign In</h2>
           <form (ngSubmit)="onSubmit()" #signinForm="ngForm">
+
+            
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input
@@ -14,9 +16,17 @@
                 name="email"
                 [(ngModel)]="signinData.email"
                 required
+                pattern="^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
                 placeholder="Enter your email"
-              >
+                #email="ngModel"
+              />
+              <div *ngIf="email.invalid && email.touched" class="text-danger mt-1">
+                <small *ngIf="email.errors?.['required']">Email is required.</small>
+                <small *ngIf="email.errors?.['pattern']">Enter a valid email.</small>
+              </div>
             </div>
+
+           
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input
@@ -26,13 +36,23 @@
                 name="password"
                 [(ngModel)]="signinData.password"
                 required
+                pattern="^(?=.*[A-Z])(?=.*\\d).{6,}$"
                 placeholder="Enter your password"
-              >
+                #password="ngModel"
+              />
+              <div *ngIf="password.invalid && password.touched" class="text-danger mt-1">
+                <small *ngIf="password.errors?.['required']">Password is required.</small>
+                <small *ngIf="password.errors?.['pattern']">
+                  Password must be at least 6 characters, include a capital letter and a number.
+                </small>
+              </div>
             </div>
+
             <div class="d-grid">
               <button type="submit" class="btn btn-primary" [disabled]="!signinForm.valid">Sign In</button>
             </div>
           </form>
+
           <div class="text-center mt-3">
             <p>Don't have an account? <a routerLink="/signup">Create account</a></p>
           </div>
