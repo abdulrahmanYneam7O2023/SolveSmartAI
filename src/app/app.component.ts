@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+  import { Component } from '@angular/core';
+  import { HeaderComponent } from './shared/header/header.component';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './shared/header/header.component';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent],
+  imports: [RouterOutlet, FormsModule, HeaderComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'SolveSmart';

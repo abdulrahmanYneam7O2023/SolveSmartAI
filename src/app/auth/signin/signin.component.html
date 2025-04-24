@@ -36,7 +36,7 @@
                 name="password"
                 [(ngModel)]="signinData.password"
                 required
-                pattern="^(?=.*[A-Z])(?=.*\\d).{6,}$"
+                pattern="^\d{6,}$"
                 placeholder="Enter your password"
                 #password="ngModel"
               />
