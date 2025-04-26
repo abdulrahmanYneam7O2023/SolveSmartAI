@@ -1,12 +1,12 @@
 <div class="chat-box">
     <textarea [(ngModel)]="userMessage" placeholder="Write your question"></textarea>
     <button (click)="sendMessage()">Send</button>
-  
+
     <div *ngIf="isLoading">Loading...</div>
-  
+    <h1>hello</h1>
     <div *ngIf="aiResponse">
       <strong>Response</strong>
       <p>{{ aiResponse }}</p>
+      <a routerLink="/home">Back to Home</a>
     </div>
   </div>
-  

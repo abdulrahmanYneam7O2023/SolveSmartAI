@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './signin.component.html',
-  styleUrl: './signin.component.css'
+  styleUrls: ['./signin.component.css']
 })
 export class SigninComponent {
   signinData = {
@@ -19,6 +19,6 @@ export class SigninComponent {
 
   onSubmit() {
     console.log('Signing IN', this.signinData);
-   
+
   }
 }

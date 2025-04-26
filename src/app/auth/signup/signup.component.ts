@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common'
   standalone: true,
   imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
   signupData = {

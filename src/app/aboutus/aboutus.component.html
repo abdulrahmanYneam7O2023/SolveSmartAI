@@ -1,0 +1,67 @@
+<div class="about-container">
+  <div class="about-header">
+    <h1>About Us</h1>
+    <p>Meet our team and vision</p>
+  </div>
+
+  <div class="about-content">
+    <section class="mission-section">
+      <h2>Our Mission</h2>
+      <p>
+        We aim to provide a comprehensive educational platform to help programmers develop their problem-solving skills and learn algorithms and data structures. We believe that continuous learning and practice are the keys to developing programming skills.
+      </p>
+    </section>
+
+    <section class="vision-section">
+      <h2>Our Vision</h2>
+      <p>
+        We aspire to build an integrated programming community that helps programmers grow by providing a variety of programming problems and educational resources, along with AI support to provide personalized assistance to each user.
+      </p>
+    </section>
+
+    <section class="features-section">
+      <h2>What Makes Us Unique</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <mat-icon>code</mat-icon>
+          <h3>Diverse Problems</h3>
+          <p>A variety of programming problems with different difficulty levels suitable for all levels.</p>
+        </div>
+
+        <div class="feature-card">
+          <mat-icon>smart_toy</mat-icon>
+          <h3>AI Support</h3>
+          <p>An intelligent assistant that provides personalized guidance to help you solve problems.</p>
+        </div>
+
+        <div class="feature-card">
+          <mat-icon>school</mat-icon>
+          <h3>Educational Resources</h3>
+          <p>Explanations and examples of basic algorithms and data structures.</p>
+        </div>
+
+        <div class="feature-card">
+          <mat-icon>people</mat-icon>
+          <h3>Active Community</h3>
+          <p>Connect with other programmers and share solutions and ideas to develop your skills.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="team-section">
+      <h2>Our Team</h2>
+      <div class="team-grid">
+        <div class="team-card" *ngFor="let member of teamMembers">
+          <div class="member-image">
+            <img [src]="member.image" [alt]="member.name">
+          </div>
+          <div class="member-info">
+            <h3>{{ member.name }}</h3>
+            <p class="member-role">{{ member.role }}</p>
+            <p class="member-bio">{{ member.bio }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
