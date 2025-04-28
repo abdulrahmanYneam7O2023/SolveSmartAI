@@ -1,0 +1,124 @@
+<div class="container" *ngIf="problem">
+  <div class="problem-header">
+    <div class="title-section">
+      <h1>{{ problem.title }}</h1>
+      <span class="difficulty-badge" [style.background-color]="getDifficultyColor(problem.difficultyLevel)">
+        {{ problem.difficultyLevel }}
+      </span>
+    </div>
+
+    <div class="tags-section" *ngIf="problem.tags && problem.tags.length > 0">
+      <mat-chip-listbox>
+        <mat-chip *ngFor="let tag of problem.tags">{{ tag }}</mat-chip>
+      </mat-chip-listbox>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="problem-content">
+    <div class="problem-description">
+      <h2>Problem Description</h2>
+      <p>{{ problem.description }}</p>
+
+      <div *ngIf="problem.constraints" class="constraints">
+        <h3>Constraints</h3>
+        <p>{{ problem.constraints }}</p>
+      </div>
+
+      <div *ngIf="problem.examples && problem.examples.length > 0" class="examples">
+        <h3>Examples</h3>
+        <div class="example" *ngFor="let example of problem.examples; let i = index">
+          <h4>Example {{ i + 1 }}</h4>
+          <div class="example-content">
+            <div class="example-input">
+              <strong>Input:</strong>
+              <pre>{{ example.input }}</pre>
+            </div>
+            <div class="example-output">
+              <strong>Output:</strong>
+              <pre>{{ example.output }}</pre>
+            </div>
+            <div class="example-explanation" *ngIf="example.explanation">
+              <strong>Explanation:</strong>
+              <p>{{ example.explanation }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="solution-section">
+      <div class="language-selector">
+        <mat-form-field appearance="outline">
+          <mat-label>Programming Language</mat-label>
+          <mat-select [(ngModel)]="selectedLanguage" (selectionChange)="onLanguageChange()">
+            <mat-option *ngFor="let lang of languages" [value]="lang.value">
+              {{ lang.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="code-editor-container">
+        <app-code-edito [(code)]="code" [language]="selectedLanguage"></app-code-edito>
+      </div>
+
+      <div class="submit-section">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="submitSolution()"
+          [disabled]="isSubmitting">
+          <mat-icon>send</mat-icon>
+          Submit Solution
+        </button>
+      </div>
+
+      <div class="result-section" *ngIf="result">
+        <h3>Result</h3>
+        <div class="result-card" [ngClass]="{'success': result.success, 'error': !result.success}">
+          <div class="result-header">
+            <mat-icon *ngIf="result.success">check_circle</mat-icon>
+            <mat-icon *ngIf="!result.success">error</mat-icon>
+            <span>{{ result.success ? 'Success' : 'Failed' }}</span>
+          </div>
+
+          <div class="result-details">
+            <div *ngIf="result.output" class="output">
+              <strong>Output:</strong>
+              <pre>{{ result.output }}</pre>
+            </div>
+
+            <div *ngIf="result.error" class="error-message">
+              <strong>Error:</strong>
+              <pre>{{ result.error }}</pre>
+            </div>
+
+            <div class="stats">
+              <div *ngIf="result.executionTime !== undefined" class="stat">
+                <mat-icon>timer</mat-icon>
+                <span>Execution Time: {{ result.executionTime }} ms</span>
+              </div>
+
+              <div *ngIf="result.memoryUsed !== undefined" class="stat">
+                <mat-icon>memory</mat-icon>
+                <span>Memory Used: {{ result.memoryUsed }} MB</span>
+              </div>
+
+              <div *ngIf="result.testCasesPassed !== undefined" class="stat">
+                <mat-icon>assignment_turned_in</mat-icon>
+                <span>Passed Tests: {{ result.testCasesPassed }}/{{ result.totalTestCases }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="!problem">
+  <mat-spinner></mat-spinner>
+  <p>Loading problem...</p>
+</div>

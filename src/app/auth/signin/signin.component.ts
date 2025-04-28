@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [FormsModule, RouterLink, CommonModule],
   templateUrl: './signin.component.html',
-  styleUrl: './signin.component.css'
+  styleUrls: ['./signin.component.css']
 })
 export class SigninComponent {
   
@@ -22,6 +22,7 @@ export class SigninComponent {
   constructor(private http: HttpClient) {}
 
   onSubmit() {
+
     this.http.post('https://localhost:7212/api/auth/login', this.signinData)
       .subscribe({
         next: (response) => {
@@ -31,5 +32,5 @@ export class SigninComponent {
           console.error('Login Error:', err);
         }
       });
-    }
+  }
 }

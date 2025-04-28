@@ -1,19 +1,25 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-chat',
-  templateUrl: './chat.component.html',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, RouterLink, CommonModule],
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.css'],
 })
+
 export class ChatComponent {
   userInput = '';
   messages: { from: string, text: string }[] = [];
 
   sendMessage() {
     if (!this.userInput.trim()) return;
+
 
     
     this.messages.push({ from: 'user', text: this.userInput });
@@ -31,8 +37,10 @@ export class ChatComponent {
     })
     .catch(error => {
       console.error('Error:', error);
+
     });
 
     this.userInput = '';
   }
+
 }

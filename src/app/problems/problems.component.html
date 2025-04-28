@@ -1,0 +1,32 @@
+<p>problems works!</p>
+<form [formGroup]="problemForm" (ngSubmit)="onSubmit()" class="container mt-4">
+  <h2>{{ isEditMode ? 'Edit Problem' : 'Add New Problem' }}</h2>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" required>
+    <mat-error *ngIf="problemForm.get('title')?.invalid">Title is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Description</mat-label>
+    <textarea matInput formControlName="description" required rows="4"></textarea>
+    <mat-error *ngIf="problemForm.get('description')?.invalid">Description is required (max 1000 chars)</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Constraints (Optional)</mat-label>
+    <input matInput formControlName="constraints">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="w-100">
+    <mat-label>Difficulty Level</mat-label>
+    <mat-select formControlName="difficultyLevel" required>
+      <mat-option *ngFor="let level of difficultyLevels" [value]="level">{{ level }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="problemForm.invalid">
+    {{ isEditMode ? 'Update' : 'Save' }}
+  </button>
+</form>
