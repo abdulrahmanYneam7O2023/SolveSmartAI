@@ -7,6 +7,7 @@
 
           <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
 
+           
             <div class="mb-3">
               <label for="name" class="form-label">Full Name</label>
               <input
@@ -14,8 +15,9 @@
                 class="form-control"
                 id="name"
                 name="name"
-                [(ngModel)]="signupData.name"
+                [(ngModel)]="signupData.userName" 
                 required
+                pattern="^[a-zA-Z\s]+$" 
                 placeholder="Enter your full name"
                 #name="ngModel"
               >
@@ -24,7 +26,7 @@
               </small>
             </div>
 
-            
+          
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input
@@ -38,13 +40,12 @@
                 #email="ngModel"
                 placeholder="Enter your email"
               >
-      
               <small class="text-danger" *ngIf="email.invalid && email.touched">
                 Please enter a valid email address.
               </small>
             </div>
 
-          
+           
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input
@@ -54,17 +55,16 @@
                 name="password"
                 [(ngModel)]="signupData.password"
                 required
-                pattern=^.{6,}$
+                pattern="^(?=.*[a-z])(?=.*[\W_]).{6,}$"
                 #password="ngModel"
                 placeholder="Enter your password"
               >
-             
               <small class="text-danger" *ngIf="password.invalid && password.touched">
-                Password is not valid.
+                Password must have at least one lowercase letter and one non-alphanumeric character.
               </small>
             </div>
 
-            
+            <!-- Confirm Password Field -->
             <div class="mb-3">
               <label for="confirmPassword" class="form-label">Confirm Password</label>
               <input
@@ -85,7 +85,25 @@
               </small>
             </div>
 
-       
+            <!-- Job Title Field -->
+            <div class="mb-3">
+              <label for="jobTitle" class="form-label">Job Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="jobTitle"
+                name="jobTitle"
+                [(ngModel)]="signupData.jobTitle"
+                required
+                placeholder="Enter your job title"
+                #jobTitle="ngModel"
+              >
+              <small class="text-danger" *ngIf="jobTitle.invalid && jobTitle.touched">
+                Job title is required.
+              </small>
+            </div>
+
+            <!-- Submit Button -->
             <div class="d-grid">
               <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid || signupData.password !== signupData.confirmPassword">
                 Create Account
@@ -93,7 +111,7 @@
             </div>
           </form>
 
-    
+          <!-- Sign In Link -->
           <div class="text-center mt-3">
             <p>Already have an account? <a routerLink="/signin">Sign In</a></p>
           </div>

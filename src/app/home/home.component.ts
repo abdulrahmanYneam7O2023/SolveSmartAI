@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+ 
   features = [
     {
       title: 'Multi-Language Challenges',
@@ -27,4 +28,7 @@ export class HomeComponent {
       icon: 'bi-bullseye' // Icon for targeting/focus
     }
   ];
+  
 }
+
+

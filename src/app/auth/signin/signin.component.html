@@ -16,7 +16,7 @@
                 name="email"
                 [(ngModel)]="signinData.email"
                 required
-                pattern="^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+                pattern="^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,}$"
                 placeholder="Enter your email"
                 #email="ngModel"
               />
@@ -36,7 +36,7 @@
                 name="password"
                 [(ngModel)]="signinData.password"
                 required
-                pattern="^\d{6,}$"
+                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"               
                 placeholder="Enter your password"
                 #password="ngModel"
               />

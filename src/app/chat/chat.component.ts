@@ -1,30 +1,38 @@
 import { Component } from '@angular/core';
-import { ChatBotService } from '../services/chat-bot.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
 })
 export class ChatComponent {
-  userMessage: string = '';
-  aiResponse: string = '';
-  isLoading = false;
-
-  constructor(private chatBotService: ChatBotService) {}
+  userInput = '';
+  messages: { from: string, text: string }[] = [];
 
   sendMessage() {
-    if (!this.userMessage.trim()) return;
+    if (!this.userInput.trim()) return;
 
-    this.isLoading = true;
-    this.chatBotService.askQuestion(this.userMessage).subscribe({
-      next: (res) => {
-        this.aiResponse = res;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.aiResponse = 'Error: ' + err.message;
-        this.isLoading = false;
-      }
+    
+    this.messages.push({ from: 'user', text: this.userInput });
+
+    
+    fetch('https://localhost:7212', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: this.userInput })
+    })
+    .then(response => response.json())
+    .then(data => {
+   
+      this.messages.push({ from: 'bot', text: data.response });
+    })
+    .catch(error => {
+      console.error('Error:', error);
     });
+
+    this.userInput = '';
   }
 }
