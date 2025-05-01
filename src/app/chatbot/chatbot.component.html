@@ -1,0 +1,18 @@
+<div class="chatbot-container">
+  <div class="chat-header">
+    🤖 AI Chatbot
+  </div>
+
+  <div class="chat-box" [innerHTML]="responseHtml || 'Waiting for your message...'">
+  </div>
+
+  <div class="chat-input-container">
+    <input
+      type="text"
+      [(ngModel)]="userInput"
+      (keydown.enter)="sendMessage()"
+      placeholder="Type your message..."
+    />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>
