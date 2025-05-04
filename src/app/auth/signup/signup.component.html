@@ -5,9 +5,9 @@
         <div class="card-body p-4">
           <h2 class="text-center mb-4">Create New Account</h2>
 
-          <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+          <form   [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
 
-           
+
             <div class="mb-3">
               <label for="name" class="form-label">Full Name</label>
               <input
@@ -15,18 +15,27 @@
                 class="form-control"
                 id="name"
                 name="name"
-                [(ngModel)]="signupData.userName" 
                 required
-                pattern="^[a-zA-Z\s]+$" 
                 placeholder="Enter your full name"
-                #name="ngModel"
+                formControlName="userName"
               >
-              <small class="text-danger" *ngIf="name.invalid && name.touched">
-                Full name is required.
-              </small>
+              @let userNameControl = signUpForm.get('userName');
+              @if ( userNameControl?.errors && userNameControl?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  <ul>
+                    @if (userNameControl?.getError('required') && userNameControl?.touched) {
+                      <li> userName is required</li>
+
+                    }@else if (userNameControl?.getError('minlength')&& userNameControl?.touched) {
+                    <li> userName must be at least 3 characters </li>
+                    }
+                  </ul>
+                  </div>
+              }
+
             </div>
 
-          
+
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input
@@ -34,18 +43,24 @@
                 class="form-control"
                 id="email"
                 name="email"
-                [(ngModel)]="signupData.email"
-                required
-                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-                #email="ngModel"
                 placeholder="Enter your email"
+                formControlName="email"
+
               >
-              <small class="text-danger" *ngIf="email.invalid && email.touched">
-                Please enter a valid email address.
-              </small>
+              @let emailInput = signUpForm.get('email');
+              @if ( emailInput?.errors && emailInput?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  <ul>
+                    @if (emailInput?.getError('required') && emailInput?.touched) {
+                      <li> email is required</li>
+
+                    }
+                  </ul>
+                  </div>
+              }
             </div>
 
-           
+
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input
@@ -53,62 +68,70 @@
                 class="form-control"
                 id="password"
                 name="password"
-                [(ngModel)]="signupData.password"
                 required
                 pattern="^(?=.*[a-z])(?=.*[\W_]).{6,}$"
-                #password="ngModel"
                 placeholder="Enter your password"
+                formControlName="password"
+
               >
-              <small class="text-danger" *ngIf="password.invalid && password.touched">
-                Password must have at least one lowercase letter and one non-alphanumeric character.
-              </small>
+              @let passwordInput = signUpForm.get('password');
+              @if ( passwordInput?.errors && passwordInput?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  <ul>
+                    @if (passwordInput?.getError('required') && passwordInput?.touched) {
+                      <li> password is required</li>
+
+                    }@else if (passwordInput?.getError('pattern') && passwordInput?.touched) {
+                      <li> password must be like Ahmed&#64;123</li>
+                    }
+                  </ul>
+                  </div>
+              }
             </div>
 
-            <!-- Confirm Password Field -->
-            <div class="mb-3">
-              <label for="confirmPassword" class="form-label">Confirm Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="confirmPassword"
-                name="confirmPassword"
-                [(ngModel)]="signupData.confirmPassword"
-                required
-                placeholder="Re-enter your password"
-                #confirmPassword="ngModel"
-              >
-              <small class="text-danger" *ngIf="confirmPassword.invalid && confirmPassword.touched">
-                Please confirm your password.
-              </small>
-              <small class="text-danger" *ngIf="signupData.confirmPassword !== signupData.password && confirmPassword.touched">
-                Passwords do not match.
-              </small>
-            </div>
 
-            <!-- Job Title Field -->
             <div class="mb-3">
-              <label for="jobTitle" class="form-label">Job Title</label>
+              <label for="jobTitle" class="form-label">Phone Number</label>
               <input
-                type="text"
+                type="number"
                 class="form-control"
                 id="jobTitle"
                 name="jobTitle"
-                [(ngModel)]="signupData.jobTitle"
                 required
                 placeholder="Enter your job title"
-                #jobTitle="ngModel"
+                formControlName="phoneNumber"
               >
-              <small class="text-danger" *ngIf="jobTitle.invalid && jobTitle.touched">
-                Job title is required.
-              </small>
+              @let phoneInput = signUpForm.get('phoneNumber');
+              @if ( phoneInput?.errors && phoneInput?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  <ul>
+                    @if (phoneInput?.getError('required') && phoneInput?.touched) {
+                      <li> phone is required</li>
+
+                    }@else if (phoneInput?.getError('pattern') && phoneInput?.touched) {
+                      <li>  phone is not valid number  </li>
+                    }
+                  </ul>
+                  </div>
+              }
             </div>
 
             <!-- Submit Button -->
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary" [disabled]="!signupForm.valid || signupData.password !== signupData.confirmPassword">
-                Create Account
-              </button>
+              <button type="submit" [disabled]="isCalingApi"  class="btn btn-primary" >
+                @if (isCalingApi) {
+                  <i class="fa fa-spin fa-spinner"></i>
+
+                }@else {
+                  Create Account
+
+                }
+             </button>
+            @if (loginIsSuccess) {
+              <p class="text-center text-white bg-success py-2"> login Success </p>
+            }
             </div>
+
           </form>
 
           <!-- Sign In Link -->

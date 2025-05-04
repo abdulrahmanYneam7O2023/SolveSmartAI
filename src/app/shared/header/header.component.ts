@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component,  Input,  OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   isMobileMenuOpen = false;
   isLoggedIn = false;
   isAdmin = false;
+ @Input({required : true}) islogged!:boolean
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
@@ -24,13 +25,7 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.authService.isLoggedIn.subscribe(loggedIn => {
-      this.isLoggedIn = loggedIn;
-    });
-    
-    this.authService.isAdmin.subscribe(admin => {
-      this.isAdmin = admin;
-    });
+
   }
 
   logout(): void {

@@ -4,9 +4,9 @@
       <div class="card shadow">
         <div class="card-body p-4">
           <h2 class="text-center mb-4">Sign In</h2>
-          <form (ngSubmit)="onSubmit()" #signinForm="ngForm">
+          <form  [formGroup]="signInForm" (ngSubmit)="onSubmit()">
 
-            
+
             <div class="mb-3">
               <label for="email" class="form-label">Email</label>
               <input
@@ -14,19 +14,27 @@
                 class="form-control"
                 id="email"
                 name="email"
-                [(ngModel)]="signinData.email"
+
                 required
                 pattern="^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,}$"
                 placeholder="Enter your email"
-                #email="ngModel"
+
               />
-              <div *ngIf="email.invalid && email.touched" class="text-danger mt-1">
-                <small *ngIf="email.errors?.['required']">Email is required.</small>
-                <small *ngIf="email.errors?.['pattern']">Enter a valid email.</small>
-              </div>
+              @let emailInput = signInForm.get('email');
+
+              @if ( emailInput?.errors && emailInput?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  <ul>
+                    @if (emailInput?.getError('required') && emailInput?.touched) {
+                      <li> email is required</li>
+
+                    }
+                  </ul>
+                  </div>
+              }
             </div>
 
-           
+
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
               <input
@@ -34,22 +42,40 @@
                 class="form-control"
                 id="password"
                 name="password"
-                [(ngModel)]="signinData.password"
+
                 required
-                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"               
+                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
                 placeholder="Enter your password"
-                #password="ngModel"
               />
-              <div *ngIf="password.invalid && password.touched" class="text-danger mt-1">
-                <small *ngIf="password.errors?.['required']">Password is required.</small>
-                <small *ngIf="password.errors?.['pattern']">
-                  Password must be at least 6 characters, include a capital letter and a number.
-                </small>
-              </div>
+              @let passwordInput = signInForm.get('password');
+              @if ( passwordInput?.errors && passwordInput?.touched) {
+                <div class="alert alert-danger" role="alert">
+                  <ul>
+                    @if (passwordInput?.getError('required') && passwordInput?.touched) {
+                      <li> password is required</li>
+
+                    }@else if (passwordInput?.getError('pattern') && passwordInput?.touched) {
+                      <li> password must be like Ahmed&#64;123</li>
+                    }
+                  </ul>
+                  </div>
+              }
             </div>
 
             <div class="d-grid">
-              <button type="submit" class="btn btn-primary" [disabled]="!signinForm.valid">Sign In</button>
+              <button type="submit" [disabled]="isCalingApi" class="btn btn-primary" >
+                @if (isCalingApi) {
+                  <i class="fa fa-spin fa-spinner"></i>
+
+                }@else {
+                 Login
+
+                }
+             </button>
+            @if (loginIsSuccess) {
+              <p class="text-center text-white bg-success py-2"> login Success </p>
+            }Sign In
+
             </div>
           </form>
 

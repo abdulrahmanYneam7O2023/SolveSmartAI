@@ -4,15 +4,17 @@
       <a class="logo" routerLink="/">
         <span class="logo-text">{{ title }}</span>
       </a>
-      
+
       <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" aria-label="Toggle navigation">
         <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
       </button>
-      
+
       <nav class="main-nav" [class.open]="isMobileMenuOpen">
+        @if(islogged){
         <ul class="nav-list">
+
           <li class="nav-item">
-            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="nav-link" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
               <mat-icon>home</mat-icon>
               <span>Home</span>
             </a>
@@ -25,30 +27,33 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/about-us" routerLinkActive="active">
+            <a class="nav-link" routerLink="/aboutus" routerLinkActive="active">
               <mat-icon>info</mat-icon>
               <span>About Us</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/contact-us" routerLinkActive="active">
+            <a class="nav-link" routerLink="/contactus" routerLinkActive="active">
               <mat-icon>email</mat-icon>
               <span>Contact Us</span>
             </a>
           </li>
-          <li class="nav-item" *ngIf="isAdmin">
-            <a class="nav-link" routerLink="/admin" routerLinkActive="active">
+          <li class="nav-item" >
+            <a class="nav-link" routerLink="/adminDashboard" routerLinkActive="active">
               <mat-icon>admin_panel_settings</mat-icon>
               <span>Admin Panel</span>
             </a>
           </li>
         </ul>
-        
+      }@else {
         <div class="auth-buttons">
-          <a *ngIf="!isLoggedIn" class="btn btn-outline" routerLink="/auth/signin">Sign In</a>
-          <a *ngIf="!isLoggedIn" class="btn btn-primary" routerLink="/auth/signup">Sign Up</a>
-          <button *ngIf="isLoggedIn" class="btn btn-outline" (click)="logout()">Logout</button>
+          <a  class="btn btn-outline"  routerLinkActive="btn-primary" routerLink="/signin">Sign In</a>
+          <a  class="btn btn-outline"  routerLinkActive="btn-primary" routerLink="/signup">Sign Up</a>
+          <button  class="btn btn-danger " (click)="logout()">Logout</button>
         </div>
+      }
+
+
       </nav>
     </div>
   </div>

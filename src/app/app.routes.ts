@@ -1,37 +1,26 @@
 import { Routes } from '@angular/router';
-import { SigninComponent } from './auth/signin/signin.component';
-import { SignupComponent } from './auth/signup/signup.component';
-import { HomeComponent } from './home/home.component';
-import { AboutusComponent } from './aboutus/aboutus.component';
-import { ChatbotComponent } from './chatbot/chatbot.component';
-import { ProblemsComponent } from './problems/problems.component';
-import { ContactUsComponent } from './contact-us/contact-us.component';
-import { ProblemListComponent } from './problem-list/problem-list.component';
-import { CodeEditorComponent } from './code-editor/code-editor.component';
-import { ProblemDetailComponent } from './problem-detail/problem-detail.component';
-import { NotFoundComponent } from './errors/not-found/not-found.component';
-import { ProblemManagementComponent } from './admin/problem-management/problem-management.component';
-import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
-import { AdminGuard } from './guards/admin.guard';
+
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'problem-detail/:id', component: ProblemDetailComponent },
-  { path: 'problems', component: ProblemsComponent },
-  { path: 'about-us', component: AboutusComponent },
-  { path: 'code-editor', component: CodeEditorComponent },
-  { path: 'problem-list', component: ProblemListComponent },
-  { path: 'contact-us', component: ContactUsComponent },
-  { path: 'auth/signin', component: SigninComponent },
-  { path: 'auth/signup', component: SignupComponent },
-  {
-    path: 'admin',
-    canActivate: [AdminGuard],
+  {path : '' , loadComponent : () => import('./core/auth/auth.component').then(c => c.AuthComponent),
     children: [
-      { path: '', component: AdminDashboardComponent },
-      { path: 'problems', component: ProblemManagementComponent },
+      {path: '' , redirectTo: 'signin', pathMatch: 'full'},
+      {path: 'signin' , loadComponent: () => import('./auth/signin/signin.component').then(c => c.SigninComponent)},
+      {path: 'signup' , loadComponent: () => import('./auth/signup/signup.component').then(c => c.SignupComponent)}
     ]
   },
-  { path: '**', component: NotFoundComponent },
+  {path:'' , loadComponent: ()=> import('./core/blank/blank.component').then(c => c.BlankComponent),
+    children: [
+      {path: '' , redirectTo: 'home', pathMatch: 'full'},
+      {path: 'home' , loadComponent: () => import('./home/home.component').then(c => c.HomeComponent)},
+      {path: 'aboutus' , loadComponent: () => import('./aboutus/aboutus.component').then(c => c.AboutusComponent)},
+      {path: 'chatbot' , loadComponent: () => import('./chatbot/chatbot.component').then(c => c.ChatbotComponent)},
+      {path: 'problems' , loadComponent: () => import('./problems/problems.component').then(c => c.ProblemsComponent)},
+      {path: 'contactus' , loadComponent: () => import('./contact-us/contact-us.component').then(c => c.ContactUsComponent)},
+      {path: 'problem-list' , loadComponent: () => import('./problem-list/problem-list.component').then(c => c.ProblemListComponent)},
+      {path: 'code-editor' , loadComponent: () => import('./code-editor/code-editor.component').then(c => c.CodeEditorComponent)},
+      {path: 'problem-detail' , loadComponent: () => import('./problem-detail/problem-detail.component').then(c => c.ProblemDetailComponent)},
+      {path: 'adminDashboard' , loadComponent: () => import('./admin/admin-dashboard/admin-dashboard.component').then(c => c.AdminDashboardComponent)}
+
+  ]}
 ];
