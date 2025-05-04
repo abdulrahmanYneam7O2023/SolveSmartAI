@@ -45,11 +45,14 @@
             </a>
           </li>
         </ul>
+        <div class="auth-buttons">
+
+          <button  class="btn btn-danger " (click)="logout()">Logout</button>
+        </div>
       }@else {
         <div class="auth-buttons">
           <a  class="btn btn-outline"  routerLinkActive="btn-primary" routerLink="/signin">Sign In</a>
           <a  class="btn btn-outline"  routerLinkActive="btn-primary" routerLink="/signup">Sign Up</a>
-          <button  class="btn btn-danger " (click)="logout()">Logout</button>
         </div>
       }
 

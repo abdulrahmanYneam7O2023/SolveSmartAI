@@ -14,7 +14,7 @@
                 class="form-control"
                 id="email"
                 name="email"
-
+                formControlName="email"
                 required
                 pattern="^[\w\.\-]+@[a-zA-Z0-9\.\-]+\.[a-zA-Z]{2,}$"
                 placeholder="Enter your email"
@@ -42,23 +42,22 @@
                 class="form-control"
                 id="password"
                 name="password"
-
+                formControlName="password"
                 required
                 pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
                 placeholder="Enter your password"
               />
               @let passwordInput = signInForm.get('password');
               @if ( passwordInput?.errors && passwordInput?.touched) {
-                <div class="alert alert-danger" role="alert">
-                  <ul>
-                    @if (passwordInput?.getError('required') && passwordInput?.touched) {
+                @if (passwordInput?.getError('required') && passwordInput?.touched) {
+                  <div class="alert alert-danger" role="alert">
+                    <ul>
                       <li> password is required</li>
 
-                    }@else if (passwordInput?.getError('pattern') && passwordInput?.touched) {
-                      <li> password must be like Ahmed&#64;123</li>
-                    }
-                  </ul>
-                  </div>
+                    </ul>
+                    </div>
+                }
+
               }
             </div>
 

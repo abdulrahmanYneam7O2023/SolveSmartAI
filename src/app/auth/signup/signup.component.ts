@@ -37,7 +37,7 @@ export class SignupComponent {
           this.isCalingApi = false;
           this.loginIsSuccess = true;
           setTimeout(() => {
-            this._router.navigate(['/signup']);
+            this._router.navigate(['/signin']);
           },500);
           console.log(res);
         },

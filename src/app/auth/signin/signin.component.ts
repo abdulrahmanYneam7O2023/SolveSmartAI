@@ -18,38 +18,37 @@ export class SigninComponent {
   isCalingApi:boolean = false
   loginIsSuccess:boolean = false
 
-  constructor( private _formBuilder : FormBuilder , private _AuthService : AuthService  , private _router : Router) {
-    this.signInForm = this._formBuilder.group({
+  constructor( private  formBuilder : FormBuilder,private _AuthService : AuthService  , private _router : Router) {
+    this.signInForm = this.formBuilder.group({
       email: ['', [Validators.required]],
-      password: ['', [Validators.required , Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/)]] ,
+      password: ['', [Validators.required ]] ,
     })
   }
 
-
   onSubmit() {
     this.isCalingApi = true;
+    this._AuthService.signIn(this.signInForm.value).subscribe({
+      next: (res) => {
+        this.isCalingApi = false;
+        this.loginIsSuccess = true;
+        console.log(res);
+        setTimeout(() => {
+          this._router.navigate(['/home']);
+        },500);
+      },
+      error: (error) => {
+        this.isCalingApi = false;
+        console.log(error);
+      }
+    });
+//     if (this.signInForm.valid) {
 
-    if (this.signInForm.valid) {
-      this._AuthService.signIn(this.signInForm.value).subscribe({
-        next: (res) => {
-          this.isCalingApi = false;
-          this.loginIsSuccess = true;
-          setTimeout(() => {
-            this._router.navigate(['/home']);
-          },500);
-          console.log(res);
-        },
-        error: (error) => {
-          this.isCalingApi = false;
-          console.log(error);
-        }
-      });
-    }else{
-      this.isCalingApi = false;
-      this.signInForm.markAllAsTouched();
-    }
+//     }else{
+//       this.isCalingApi = false;
+//       this.signInForm.markAllAsTouched();
+//     }
 
-
+// console.log(this.signInForm.value);
 
   }
 
