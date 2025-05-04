@@ -1,33 +1,27 @@
 <!-- Welcome Section -->
-<section class="hero bg-light py-5 text-center">
+<section class="hero">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-8 mx-auto">
-        <h1 class="display-4">Welcome to SolveSmart</h1>
-        <p class="lead mb-4">Sharpen your coding skills, prepare for technical interviews, and challenge yourself with our collection of programming problems.</p>
-        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-          <button type="button" class="btn btn-primary btn-lg px-4 gap-3" routerLink="/signin">Sign In</button>
-          <button type="button" class="btn btn-outline-secondary btn-lg px-4" routerLink="/signup">Create Account</button>
-        </div>
-      </div>
+    <h1>Welcome to SolveSmart</h1>
+    <p>Sharpen your coding skills, prepare for technical interviews, and challenge yourself with our collection of programming problems.</p>
+    <div class="hero-buttons">
+      <button type="button" class="btn btn-primary" routerLink="/auth/signin">Sign In</button>
+      <button type="button" class="btn btn-outline" routerLink="/auth/signup">Create Account</button>
     </div>
   </div>
 </section>
 
 <!-- Features Section -->
-<section class="features py-5">
+<section class="features">
   <div class="container">
-    <h2 class="text-center mb-5">Platform Features</h2>
+    <h2>Platform Features</h2>
     <div class="row g-4">
       <div class="col-md-4" *ngFor="let feature of features">
-        <div class="card h-100 shadow-sm">
-          <div class="card-body text-center">
-            <div class="feature-icon mb-3">
-              <i class="bi fs-1" [ngClass]="feature.icon"></i>
-            </div>
-            <h5 class="card-title">{{feature.title}}</h5>
-            <p class="card-text">{{feature.description}}</p>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="bi" [ngClass]="feature.icon"></i>
           </div>
+          <h5>{{feature.title}}</h5>
+          <p>{{feature.description}}</p>
         </div>
       </div>
     </div>
@@ -35,40 +29,50 @@
 </section>
 
 <!-- How It Works Section -->
-<section class="how-it-works py-5 bg-light">
+<section class="how-it-works">
   <div class="container">
-    <h2 class="text-center mb-5">How It Works</h2>
+    <h2>How It Works</h2>
     <div class="row">
       <div class="col-md-4 mb-4 mb-md-0">
-        <div class="text-center">
-          <div class="step-number mb-3">1</div>
+        <div class="step-content">
+          <div class="step-number">1</div>
           <h5>Choose a Problem</h5>
           <p>Select a coding challenge from our extensive library.</p>
         </div>
       </div>
       <div class="col-md-4 mb-4 mb-md-0">
-        <div class="text-center">
-          <div class="step-number mb-3">2</div>
-          <h5>Write Your Code</h5>
-          <p>Implement your solution using our integrated online editor.</p>
+        <div class="step-content">
+          <div class="step-number">2</div>
+          <h5>Write Your Solution</h5>
+          <p>Use the integrated code editor to write your solution.</p>
         </div>
       </div>
       <div class="col-md-4">
-        <div class="text-center">
-          <div class="step-number mb-3">3</div>
-          <h5>Test & Submit</h5>
-          <p>Run test cases against your code and submit for evaluation.</p>
+        <div class="step-content">
+          <div class="step-number">3</div>
+          <h5>Submit and Learn</h5>
+          <p>Submit your code, get instant feedback, and improve your skills.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Call to Action Section -->
-<section class="cta py-5 text-center">
+<!-- Popular Problems Section -->
+<section class="popular-problems">
   <div class="container">
-    <h2>Ready to Start Coding?</h2>
-    <p class="lead mb-4">Join SolveSmart today and level up your programming skills.</p>
-    <button type="button" class="btn btn-primary btn-lg" routerLink="/signup">Start Practicing Now</button>
+    <h2>Popular Problems</h2>
+    <div class="row g-4">
+      <div class="col-md-4" *ngFor="let problem of popularProblems">
+        <div class="problem-card">
+          <div class="problem-difficulty" [ngClass]="problem.difficulty.toLowerCase()">
+            {{problem.difficulty}}
+          </div>
+          <h5>{{problem.title}}</h5>
+          <p>{{problem.description}}</p>
+          <a [routerLink]="['/problem', problem.id]" class="btn btn-sm btn-primary">Solve Now</a>
+        </div>
+      </div>
+    </div>
   </div>
 </section>

@@ -1,34 +1,55 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<header class="app-header">
   <div class="container">
-    <a class="navbar-brand" routerLink="/">{{ title }}</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/chats" routerLinkActive="active">Ask Me</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/problem-list" routerLinkActive="active">Problems</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/about-us" routerLinkActive="active">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/contact-us" routerLinkActive="active">Contact Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/signin" routerLinkActive="active">Sign In</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/signup" routerLinkActive="active">Sign Up</a>
-        </li>
-      </ul>
+    <div class="header-content">
+      <a class="logo" routerLink="/">
+        <span class="logo-text">{{ title }}</span>
+      </a>
+      
+      <button class="mobile-menu-toggle" (click)="toggleMobileMenu()" aria-label="Toggle navigation">
+        <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+      </button>
+      
+      <nav class="main-nav" [class.open]="isMobileMenuOpen">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              <mat-icon>home</mat-icon>
+              <span>Home</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/problem-list" routerLinkActive="active">
+              <mat-icon>code</mat-icon>
+              <span>Problems</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/about-us" routerLinkActive="active">
+              <mat-icon>info</mat-icon>
+              <span>About Us</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/contact-us" routerLinkActive="active">
+              <mat-icon>email</mat-icon>
+              <span>Contact Us</span>
+            </a>
+          </li>
+          <li class="nav-item" *ngIf="isAdmin">
+            <a class="nav-link" routerLink="/admin" routerLinkActive="active">
+              <mat-icon>admin_panel_settings</mat-icon>
+              <span>Admin Panel</span>
+            </a>
+          </li>
+        </ul>
+        
+        <div class="auth-buttons">
+          <a *ngIf="!isLoggedIn" class="btn btn-outline" routerLink="/auth/signin">Sign In</a>
+          <a *ngIf="!isLoggedIn" class="btn btn-primary" routerLink="/auth/signup">Sign Up</a>
+          <button *ngIf="isLoggedIn" class="btn btn-outline" (click)="logout()">Logout</button>
+        </div>
+      </nav>
     </div>
   </div>
-</nav>
+</header>

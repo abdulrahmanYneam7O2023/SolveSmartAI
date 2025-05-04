@@ -1,0 +1,44 @@
+<div class="floating-chatbot-container" [class.open]="isOpen">
+  <!-- Chat toggle button -->
+  <button 
+    class="chat-toggle-btn" 
+    (click)="toggleChat()" 
+    matTooltip="{{isOpen ? 'إغلاق المحادثة' : 'فتح المحادثة'}}"
+    [matTooltipPosition]="'left'">
+    <mat-icon>{{isOpen ? 'close' : 'chat'}}</mat-icon>
+  </button>
+
+  <!-- Chat window -->
+  <div class="chat-window" *ngIf="isOpen">
+    <div class="chat-header">
+      <div class="chat-title">
+        <mat-icon>smart_toy</mat-icon>
+        <span>المساعد الذكي</span>
+      </div>
+    </div>
+
+    <div class="chat-messages" #scrollMe>
+      <div *ngFor="let message of messages" 
+           class="message" 
+           [ngClass]="{'user-message': message.type === 'user', 'bot-message': message.type === 'bot'}">
+        <div class="message-content" *ngIf="message.type === 'user'">{{message.content}}</div>
+        <div class="message-content" *ngIf="message.type === 'bot'" [innerHTML]="message.html"></div>
+      </div>
+    </div>
+
+    <div class="chat-input-container">
+      <input 
+        type="text" 
+        [(ngModel)]="userInput" 
+        (keydown.enter)="sendMessage()" 
+        placeholder="اكتب رسالتك هنا..."
+        [disabled]="isLoading"
+      />
+      <button 
+        (click)="sendMessage()" 
+        [disabled]="isLoading || !userInput.trim()">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>

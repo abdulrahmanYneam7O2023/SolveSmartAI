@@ -1,0 +1,104 @@
+// SolveSmart AI Theme Variables (LeetCode Inspired)
+
+// Primary Color Palette (LeetCode Green)
+$primary-color: #2cbb5d;
+$primary-light: #e7f8ed;
+$primary-dark: #249d4c;
+
+// Secondary Color Palette (LeetCode Orange)
+$secondary-color: #ffa116;
+$secondary-light: #fff7eb;
+$secondary-dark: #e69114;
+
+// Tertiary Color Palette (Blue)
+$tertiary-color: #0a84ff;
+$tertiary-light: #e6f2ff;
+$tertiary-dark: #0974e0;
+
+// Difficulty Colors
+$easy-color: #00af9b; // Teal
+$medium-color: #ffa116; // Orange
+$hard-color: #ff375f; // Red
+
+// Neutral Colors
+$background-light: #f7f9fa;
+$background-dark: #1a1a1a;
+$card-bg-light: #ffffff;
+$card-bg-dark: #2d2d2d;
+$border-light: #e4e7eb;
+$border-dark: #444444;
+$divider-light: #eaedf0;
+$divider-dark: #3d3d3d;
+
+// Text Colors
+$text-primary-light: #262626;
+$text-secondary-light: #5c5c5c;
+$text-tertiary-light: #8a8a8a;
+$text-disabled-light: #bfbfbf;
+$text-primary-dark: rgba(255, 255, 255, 0.87);
+$text-secondary-dark: rgba(255, 255, 255, 0.6);
+$text-tertiary-dark: rgba(255, 255, 255, 0.45);
+$text-disabled-dark: rgba(255, 255, 255, 0.38);
+
+// Shadows
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 3px 8px rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 16px;
+$border-radius-circle: 50%;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Z-index levels
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;
+
+// LeetCode-inspired Mixins
+@mixin card-hover {
+  transition: transform $transition-fast, box-shadow $transition-fast;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin difficulty-badge($color) {
+  background-color: $color;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 500;
+  font-size: 12px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@mixin tag-pill($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}

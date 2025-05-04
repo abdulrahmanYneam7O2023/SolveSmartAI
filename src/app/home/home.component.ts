@@ -1,34 +1,61 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink,CommonModule],
+  imports: [RouterLink, CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
  
   features = [
     {
       title: 'Multi-Language Challenges',
-      description: 'Solve coding problems using C#, C++, Java, and more. Expand your language proficiency.',
-      icon: 'bi-braces' // Icon representing code
+      description: 'Solve coding problems using JavaScript, Python, Java, and more. Expand your language proficiency.',
+      icon: 'bi-braces'
     },
     {
-      title: 'Language-Specific Editor',
-      description: 'Utilize our online editor with syntax highlighting and support tailored for C#, C++, and Java.',
-      icon: 'bi-code-slash' // Icon for code editor
+      title: 'Interactive Code Editor',
+      description: 'Utilize our online editor with syntax highlighting and intelligent code completion.',
+      icon: 'bi-code-slash'
     },
     {
       title: 'Targeted Practice',
-      description: 'Focus your practice on specific languages like C#, C++, or Java to master their nuances.',
-      icon: 'bi-bullseye' // Icon for targeting/focus
+      description: 'Focus your practice on specific algorithms and data structures to master technical interviews.',
+      icon: 'bi-bullseye'
     }
   ];
   
+  popularProblems = [
+    {
+      id: 1,
+      title: 'Two Sum',
+      description: 'Find two numbers in an array that add up to a specific target.',
+      difficulty: 'Easy'
+    },
+    {
+      id: 2,
+      title: 'Reverse Linked List',
+      description: 'Reverse a singly linked list in-place with O(1) extra memory.',
+      difficulty: 'Medium'
+    },
+    {
+      id: 3,
+      title: 'Merge K Sorted Lists',
+      description: 'Merge k sorted linked lists into one sorted linked list.',
+      difficulty: 'Hard'
+    }
+  ];
+  
+  constructor() {}
+  
+  ngOnInit(): void {
+    // Initialize component data
+  }
 }
 
 

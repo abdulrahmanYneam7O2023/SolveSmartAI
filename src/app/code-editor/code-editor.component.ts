@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-code-edito',
-  imports: [ CommonModule, FormsModule],
-  templateUrl: './code-edito.component.html',
-  styleUrls: ['./code-edito.component.css']
+  selector: 'app-code-editor',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './code-editor.component.html',
+  styleUrls: ['./code-editor.component.css'],
 })
 export class CodeEditorComponent {
   @Input() code: string = '';

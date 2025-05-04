@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -20,26 +20,26 @@ export class SignupComponent {
     jobTitle: ''
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
     if (this.signupData.password !== this.signupData.confirmPassword) {
-      console.error('Passwords do not match');
+      alert('Passwords do not match');
       return;
     }
   
-    this.http.post('https://localhost:7212/api/auth/register', this.signupData)
+    this.authService.register(this.signupData)
     .subscribe({
       next: (response) => {
         console.log('User registered successfully', response);
+        alert('Registration successful! Please sign in.');
+        this.router.navigate(['/auth/signin']);
       },
       error: (err) => {
         console.error('Register Error:', err);
         if (err.status === 400) {
-  
           alert(`Registration failed: ${err.error}`);
         } else {
-       
           alert('An unknown error occurred.');
         }
       }

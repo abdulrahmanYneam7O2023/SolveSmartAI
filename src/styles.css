@@ -1,4 +1,320 @@
-/* You can add global styles to this file, and also import other style files */
+/* SolveSmart AI - Global Styles (LeetCode Inspired) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import './app/shared/theme.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  /* LeetCode Inspired Color Palette */
+  --primary: #2cbb5d;      /* LeetCode green */
+  --primary-hover: #249d4c;
+  --primary-light: #e7f8ed;
+  --secondary: #ffa116;    /* LeetCode orange */
+  --secondary-hover: #e69114;
+  --secondary-light: #fff7eb;
+  --tertiary: #0a84ff;     /* Blue */
+  --tertiary-hover: #0974e0;
+  --tertiary-light: #e6f2ff;
+  
+  /* Difficulty Colors */
+  --easy: #00af9b;         /* Teal */
+  --medium: #ffa116;       /* Orange */
+  --hard: #ff375f;         /* Red */
+  
+  /* Neutral Colors */
+  --background: #f7f9fa;
+  --card-bg: #ffffff;
+  --border: #e4e7eb;
+  --divider: #eaedf0;
+  
+  /* Text Colors */
+  --text-primary: #262626;
+  --text-secondary: #5c5c5c;
+  --text-tertiary: #8a8a8a;
+  --text-disabled: #bfbfbf;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 3px 8px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+  
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+}
+
+/* Reset and Base Styles */
+html, body { 
+  height: 100%; 
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Global Container */
+.container {
+  padding: var(--space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Card Styling */
+mat-card {
+  border-radius: 8px !important;
+  box-shadow: var(--shadow-md) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid var(--border) !important;
+  overflow: hidden;
+  background-color: var(--card-bg) !important;
+}
+
+mat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg) !important;
+}
+
+mat-card-title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+}
+
+mat-card-subtitle {
+  color: var(--text-secondary) !important;
+  font-size: 14px !important;
+}
+
+/* Button Styling */
+button.mat-raised-button.mat-primary {
+  background-color: var(--primary) !important;
+  color: white !important;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: none;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+button.mat-raised-button.mat-primary:hover {
+  background-color: var(--primary-hover) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+button.mat-stroked-button.mat-primary {
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+button.mat-stroked-button.mat-primary:hover {
+  background-color: var(--primary-light) !important;
+}
+
+/* Form Field Styling */
+mat-form-field.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--border);
+}
+
+mat-form-field.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+  color: var(--primary);
+}
+
+mat-form-field.mat-form-field-appearance-outline .mat-form-field-label {
+  color: var(--text-tertiary);
+}
+
+/* Difficulty Badges */
+.difficulty-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  color: white;
+  font-weight: 500;
+  font-size: 12px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.easy {
+  background-color: var(--easy) !important;
+  color: white !important;
+}
+
+.medium {
+  background-color: var(--medium) !important;
+  color: white !important;
+}
+
+.hard {
+  background-color: var(--hard) !important;
+  color: white !important;
+}
+
+/* Table Styling */
+table.mat-table {
+  width: 100%;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+tr.mat-header-row {
+  background-color: var(--background);
+  height: 56px;
+}
+
+th.mat-header-cell {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+tr.mat-row:hover {
+  background-color: var(--primary-light);
+  cursor: pointer;
+}
+
+/* Navigation */
+.nav-link {
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: color 0.2s ease;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--primary);
+  background-color: var(--primary-light);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Problem List Specific */
+.problem-card {
+  margin-bottom: var(--space-md);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.problem-card mat-card-content {
+  flex-grow: 1;
+}
+
+.problem-card .problem-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.problem-tag {
+  background-color: var(--tertiary-light);
+  color: var(--tertiary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Problem Detail Specific */
+.problem-detail-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.problem-statement {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+
+/* Code Editor Specific */
+.editor-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.full-width { width: 100%; }
+.mt-1 { margin-top: var(--space-xs); }
+.mt-2 { margin-top: var(--space-sm); }
+.mt-3 { margin-top: var(--space-md); }
+.mt-4 { margin-top: var(--space-lg); }
+.mt-5 { margin-top: var(--space-xl); }
+.mb-1 { margin-bottom: var(--space-xs); }
+.mb-2 { margin-bottom: var(--space-sm); }
+.mb-3 { margin-bottom: var(--space-md); }
+.mb-4 { margin-bottom: var(--space-lg); }
+.mb-5 { margin-bottom: var(--space-xl); }
+.p-1 { padding: var(--space-xs); }
+.p-2 { padding: var(--space-sm); }
+.p-3 { padding: var(--space-md); }
+.p-4 { padding: var(--space-lg); }
+.p-5 { padding: var(--space-xl); }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .problem-detail-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .container {
+    padding: var(--space-md);
+  }
+}

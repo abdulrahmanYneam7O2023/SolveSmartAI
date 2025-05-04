@@ -1,7 +1,7 @@
 <div class="container">
   <div class="problems-header">
-    <h1>Coding Problems List</h1>
-    <p>Select a problem to start solving</p>
+    <h1>Programming Problems List</h1>
+    <p>Choose a problem to start solving</p>
   </div>
 
   <div class="filters-container">
@@ -40,23 +40,33 @@
     <mat-card *ngFor="let problem of filteredProblems" class="problem-card" (click)="navigateToProblem(problem.id)">
       <mat-card-header>
         <mat-card-title>{{ problem.title }}</mat-card-title>
-        <mat-card-subtitle>
-          <span class="difficulty-badge" [style.background-color]="getDifficultyColor(problem.difficultyLevel)">
-            {{ problem.difficultyLevel }}
-          </span>
-        </mat-card-subtitle>
+        <span class="difficulty-badge" [ngClass]="problem.difficultyLevel.toLowerCase()">
+          {{ problem.difficultyLevel }}
+        </span>
       </mat-card-header>
+      
       <mat-card-content>
         <p class="problem-description">{{ problem.description | slice:0:150 }}{{ problem.description.length > 150 ? '...' : '' }}</p>
-        <div class="problem-tags">
-          <mat-chip-listbox>
-            <mat-chip *ngFor="let tag of problem.tags">{{ tag }}</mat-chip>
-          </mat-chip-listbox>
+        
+        <div class="problem-tags" *ngIf="problem.tags && problem.tags.length > 0">
+          <span class="problem-tag" *ngFor="let tag of problem.tags">{{ tag }}</span>
         </div>
       </mat-card-content>
-      <mat-card-actions align="end">
-        <button mat-button color="primary">Solve Problem</button>
+      
+      <mat-card-actions>
+        <div *ngIf="problem.solved" class="status-solved">
+          <mat-icon>check_circle</mat-icon> Solved
+        </div>
+        <div *ngIf="problem.attempted && !problem.solved" class="status-attempted">
+          <mat-icon>history</mat-icon> Attempted
+        </div>
+        <button mat-raised-button color="primary">Solve Problem</button>
       </mat-card-actions>
     </mat-card>
+    
+    <div *ngIf="filteredProblems.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <p>No problems found matching the selected criteria</p>
+    </div>
   </div>
 </div>

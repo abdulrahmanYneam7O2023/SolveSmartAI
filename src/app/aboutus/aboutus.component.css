@@ -1,49 +1,86 @@
 .about-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 2rem 1.5rem;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .about-header {
   text-align: center;
-  margin-bottom: 48px;
-
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 16px;
-  }
-
-  p {
-    font-size: 1.2rem;
-    color: rgba(0, 0, 0, 0.6);
-  }
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.about-content {
-  section {
-    margin-bottom: 64px;
+.about-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #1976d2;
+  font-weight: 600;
+}
 
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 24px;
-      position: relative;
-      padding-bottom: 12px;
+.about-header p {
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.6);
+}
 
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 60px;
-        height: 4px;
-        background-color: #1976d2;
-      }
-    }
+.about-content section {
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-    }
+.about-content section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+}
+
+.about-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.75rem;
+  color: #1976d2;
+  font-weight: 600;
+}
+
+.about-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background-color: #1976d2;
+}
+
+.about-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 1rem;
+  }
+  
+  .about-content section {
+    padding: 1.5rem;
+  }
+  
+  .about-header h1 {
+    font-size: 1.75rem;
   }
 }
 

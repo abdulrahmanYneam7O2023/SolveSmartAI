@@ -1,76 +1,188 @@
+/* Problem List Component Styles (LeetCode Inspired) */
+
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .problems-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: var(--space-xl);
+  position: relative;
+  padding-bottom: var(--space-md);
+}
 
-  h1 {
-    font-size: 2rem;
-    margin-bottom: 8px;
-  }
+.problems-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
 
-  p {
-    color: rgba(0, 0, 0, 0.6);
-  }
+.problems-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.problems-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--primary);
+  border-radius: 2px;
 }
 
 .filters-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  background-color: var(--card-bg);
+  padding: var(--space-lg);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
 
-  mat-form-field {
-    flex: 1;
-    min-width: 200px;
-  }
+.filters-container mat-form-field {
+  flex: 1;
+  min-width: 200px;
 }
 
 .problems-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-lg);
+  margin-top: var(--space-lg);
 }
 
 .problem-card {
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
   height: 100%;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-left: 4px solid var(--primary);
+}
 
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  }
+.problem-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-light);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
 
-  mat-card-content {
-    flex-grow: 1;
-  }
+.problem-card:hover::before {
+  opacity: 0.5;
+}
 
-  .problem-description {
-    margin-bottom: 16px;
-    color: rgba(0, 0, 0, 0.7);
-  }
+.problem-card mat-card-header {
+  padding: var(--space-md) var(--space-md) 0;
+}
+
+.problem-card mat-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  color: var(--text-primary);
 }
 
 .difficulty-badge {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 4px 12px;
+  border-radius: 16px;
   color: white;
-  font-size: 0.8rem;
   font-weight: 500;
+  font-size: 12px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.problem-description {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: var(--space-md) 0;
+  flex-grow: 1;
 }
 
 .problem-tags {
-  margin-top: 16px;
+  margin-top: var(--space-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
 
-  mat-chip {
-    font-size: 0.8rem;
+.problem-tag {
+  background-color: var(--tertiary-light);
+  color: var(--tertiary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+mat-card-actions {
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  display: flex;
+  justify-content: flex-end;
+}
+
+mat-card-actions button {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 4px;
+  padding: 4px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+mat-card-actions button:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}
+
+/* Status indicators */
+.status-solved {
+  color: var(--easy);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.status-attempted {
+  color: var(--medium);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .problems-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .filters-container {
+    flex-direction: column;
+  }
+  
+  .problems-header h1 {
+    font-size: 1.8rem;
   }
 }

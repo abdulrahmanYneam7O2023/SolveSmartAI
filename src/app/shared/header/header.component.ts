@@ -1,14 +1,39 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, CommonModule, MatIconModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   title = 'SolveSmart';
+  isMobileMenuOpen = false;
+  isLoggedIn = false;
+  isAdmin = false;
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.isLoggedIn.subscribe(loggedIn => {
+      this.isLoggedIn = loggedIn;
+    });
+    
+    this.authService.isAdmin.subscribe(admin => {
+      this.isAdmin = admin;
+    });
+  }
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

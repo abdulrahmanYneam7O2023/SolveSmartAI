@@ -1,0 +1,262 @@
+/* Problem Management Component Styles (LeetCode Inspired) */
+
+.container {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+  position: relative;
+  padding-bottom: var(--space-md);
+}
+
+.header-section h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+}
+
+.header-section p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+
+.header-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background-color: var(--primary);
+  border-radius: 2px;
+}
+
+.actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  background-color: var(--card-bg);
+  padding: var(--space-md);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+}
+
+.add-button {
+  background-color: var(--primary) !important;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-md) !important;
+  height: 40px;
+  border-radius: 4px !important;
+  font-weight: 500 !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: all 0.2s ease !important;
+}
+
+.add-button:hover {
+  background-color: var(--primary-hover) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+.add-button mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.problems-table-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+table {
+  width: 100%;
+}
+
+.mat-header-cell {
+  background-color: var(--background);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: var(--space-md) !important;
+}
+
+.mat-cell {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  padding: var(--space-md) !important;
+  border-bottom: 1px solid var(--border);
+}
+
+.mat-row:hover {
+  background-color: var(--primary-light);
+}
+
+.difficulty-cell {
+  display: flex;
+  align-items: center;
+}
+
+.difficulty-badge {
+  padding: 4px 12px;
+  border-radius: 16px;
+  color: white;
+  font-weight: 500;
+  font-size: 12px;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.actions-cell {
+  display: flex;
+  gap: var(--space-xs);
+}
+
+.edit-button {
+  color: var(--tertiary) !important;
+  background-color: var(--tertiary-light) !important;
+  min-width: 36px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+}
+
+.delete-button {
+  color: var(--hard) !important;
+  background-color: rgba(255, 55, 95, 0.1) !important;
+  min-width: 36px !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+}
+
+.edit-button:hover {
+  background-color: rgba(10, 132, 255, 0.2) !important;
+}
+
+.delete-button:hover {
+  background-color: rgba(255, 55, 95, 0.2) !important;
+}
+
+.no-data-row {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.paginator {
+  background-color: var(--background);
+  border-top: 1px solid var(--border);
+}
+
+/* Problem Form Styles */
+.problem-form-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  margin-top: var(--space-lg);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border);
+}
+
+.form-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.form-header button {
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--text-tertiary);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.form-field {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+}
+
+.cancel-button {
+  color: var(--text-secondary) !important;
+}
+
+.save-button {
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.save-button:hover {
+  background-color: var(--primary-hover) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .actions-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+  }
+  
+  .search-box {
+    max-width: none;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+  
+  .header-section h1 {
+    font-size: 1.8rem;
+  }
+}

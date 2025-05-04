@@ -1,14 +1,15 @@
-  import { Component } from '@angular/core';
-  import { HeaderComponent } from './shared/header/header.component';
+import { Component } from '@angular/core';
+import { HeaderComponent } from './shared/header/header.component';
 import { RouterOutlet } from '@angular/router';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { FloatingChatbotComponent } from './shared/floating-chatbot/floating-chatbot.component';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, HeaderComponent],
+  imports: [RouterOutlet, FormsModule, HeaderComponent, FloatingChatbotComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'SolveSmart';

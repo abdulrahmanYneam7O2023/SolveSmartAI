@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -19,17 +19,18 @@ export class SigninComponent {
     password: ''
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
-
-    this.http.post('https://localhost:7212/api/auth/login', this.signinData)
+    this.authService.login(this.signinData)
       .subscribe({
         next: (response) => {
           console.log('User logged in successfully', response);
+          this.router.navigate(['/home']);
         },
         error: (err) => {
           console.error('Login Error:', err);
+          alert('Login failed. Please check your credentials and try again.');
         }
       });
   }
