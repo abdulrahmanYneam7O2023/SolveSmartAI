@@ -1,51 +1,29 @@
+// problem-management.component.ts - REPLACE COMPLETELY
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTableModule } from '@angular/material/table';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { ProblemService } from '../../services/problem.service';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ProblemService, Problem, DifficultyLevel } from '../../services/problem.service';
 
 @Component({
   selector: 'app-problem-management',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatIconModule,
-    MatButtonModule,
-    MatChipsModule,
-    MatTableModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatTooltipModule
-  ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatSnackBarModule],
   templateUrl: './problem-management.component.html',
   styleUrls: ['./problem-management.component.css']
 })
 export class ProblemManagementComponent implements OnInit {
-  problems: any[] = [];
-  displayedColumns: string[] = ['id', 'title', 'difficultyLevel', 'actions'];
-  newProblem: any = this.getEmptyProblem();
-  editMode: boolean = false;
+  problems: Problem[] = [];
+  editMode = false;
   currentProblemId: number | null = null;
+  addProblemForm: FormGroup;
+  difficultyLevels = [
+    { value: DifficultyLevel.Easy, label: 'Easy' },
+    { value: DifficultyLevel.Medium, label: 'Medium' },
+    { value: DifficultyLevel.Hard, label: 'Hard' },
+    { value: DifficultyLevel.VeryHard, label: 'Very Hard' }
+  ];
 
-  difficultyLevels = ['Easy', 'Medium', 'Hard'];
   availableTags = [
     'Array', 'String', 'Hash Table', 'Dynamic Programming', 'Math',
     'Sorting', 'Greedy', 'Depth-First Search', 'Binary Search', 'Tree',
@@ -54,118 +32,134 @@ export class ProblemManagementComponent implements OnInit {
 
   constructor(
     private problemService: ProblemService,
+    private fb: FormBuilder,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.addProblemForm = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      difficultyLevel: [DifficultyLevel.Easy, Validators.required],
+      testCaseInput: ['', Validators.required],
+      testCaseOutput: ['', Validators.required],
+      constraints: [''],
+      best_Solution: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.loadProblems();
   }
 
   loadProblems(): void {
-    this.problemService.getProblems().subscribe(
-      (problems) => {
+    this.problemService.getAllProblems().subscribe({
+      next: (problems) => {
+        console.log('Loaded problems:', problems);
         this.problems = problems;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error loading problems:', error);
-        this.showSnackBar('Failed to load problems');
+        this.showSnackBar('Error loading problems');
       }
-    );
-  }
-
-  getEmptyProblem(): any {
-    return {
-      title: '',
-      description: '',
-      difficultyLevel: 'Easy',
-      tags: [],
-      sampleInput: '',
-      sampleOutput: '',
-      constraints: ''
-    };
+    });
   }
 
   onSubmit(): void {
-    if (this.editMode) {
-      this.updateProblem();
-    } else {
-      this.addProblem();
+    if (this.addProblemForm.valid) {
+      const problemData = this.addProblemForm.value;
+      console.log('Submitting problem data:', problemData);
+
+      if (this.editMode && this.currentProblemId) {
+        this.problemService.updateProblem(this.currentProblemId, problemData).subscribe({
+          next: (updatedProblem) => {
+            console.log('Problem updated:', updatedProblem);
+            this.showSnackBar('Problem updated successfully');
+            this.resetForm();
+            this.loadProblems();
+          },
+          error: (error) => {
+            console.error('Error updating problem:', error);
+            this.showSnackBar('Error updating problem');
+          }
+        });
+      } else {
+        this.problemService.addProblem(problemData).subscribe({
+          next: (newProblem) => {
+            console.log('Problem added:', newProblem);
+            this.showSnackBar('Problem added successfully');
+            this.resetForm();
+            this.loadProblems();
+          },
+          error: (error) => {
+            console.error('Error adding problem:', error);
+            this.showSnackBar('Error adding problem');
+          }
+        });
+      }
     }
   }
 
-  addProblem(): void {
-    this.problemService.addProblem(this.newProblem).subscribe(
-      (response) => {
-        this.problems.push(response);
-        this.showSnackBar('Problem added successfully');
-        this.resetForm();
-      },
-      (error) => {
-        console.error('Error adding problem:', error);
-        this.showSnackBar('Failed to add problem');
-      }
-    );
-  }
-
-  updateProblem(): void {
-    if (this.currentProblemId === null) return;
-    
-    this.problemService.updateProblem(this.currentProblemId, this.newProblem).subscribe(
-      (response) => {
-        const index = this.problems.findIndex(p => p.id === this.currentProblemId);
-        if (index !== -1) {
-          this.problems[index] = response;
-        }
-        this.showSnackBar('Problem updated successfully');
-        this.resetForm();
-      },
-      (error) => {
-        console.error('Error updating problem:', error);
-        this.showSnackBar('Failed to update problem');
-      }
-    );
-  }
-
-  editProblem(problem: any): void {
+  editProblem(problem: Problem): void {
     this.editMode = true;
-    this.currentProblemId = problem.id;
-    this.newProblem = { ...problem };
+    this.currentProblemId = problem.problemId!;
+    this.addProblemForm.patchValue({
+      title: problem.title,
+      description: problem.description,
+      difficultyLevel: problem.difficultyLevel,
+      testCaseInput: problem.testCaseInput,
+      testCaseOutput: problem.testCaseOutput,
+      constraints: problem.constraints || '',
+      best_Solution: problem.best_Solution
+    });
   }
 
   deleteProblem(id: number): void {
     if (confirm('Are you sure you want to delete this problem?')) {
-      this.problemService.deleteProblem(id).subscribe(
-        (response) => {
-          this.problems = this.problems.filter(p => p.id !== id);
+      this.problemService.deleteProblem(id).subscribe({
+        next: () => {
           this.showSnackBar('Problem deleted successfully');
+          this.loadProblems();
         },
-        (error) => {
+        error: (error) => {
           console.error('Error deleting problem:', error);
-          this.showSnackBar('Failed to delete problem');
+          this.showSnackBar('Error deleting problem');
         }
-      );
+      });
     }
   }
 
   resetForm(): void {
-    this.newProblem = this.getEmptyProblem();
+    this.addProblemForm.reset({
+      difficultyLevel: DifficultyLevel.Easy
+    });
     this.editMode = false;
     this.currentProblemId = null;
   }
 
+  private showSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000
+    });
+  }
+
+  getDifficultyLabel(level: DifficultyLevel): string {
+    const difficulty = this.difficultyLevels.find(l => l.value === level);
+    return difficulty ? difficulty.label : 'Unknown';
+  }
+
   addTag(tag: string): void {
-    if (!this.newProblem.tags.includes(tag)) {
-      this.newProblem.tags.push(tag);
+    if (!tag) return;
+    const currentTags = this.addProblemForm.get('tags')?.value || [];
+    if (!currentTags.includes(tag)) {
+      this.addProblemForm.patchValue({
+        tags: [...currentTags, tag]
+      });
     }
   }
 
   removeTag(tag: string): void {
-    this.newProblem.tags = this.newProblem.tags.filter((t: string) => t !== tag);
-  }
-
-  showSnackBar(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 3000,
+    const currentTags = this.addProblemForm.get('tags')?.value || [];
+    this.addProblemForm.patchValue({
+      tags: currentTags.filter((t: string) => t !== tag)
     });
   }
 }

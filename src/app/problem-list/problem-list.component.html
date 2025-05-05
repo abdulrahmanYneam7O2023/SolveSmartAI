@@ -1,72 +1,65 @@
 <div class="container">
-  <div class="problems-header">
+  <div class="header-section">
     <h1>Programming Problems List</h1>
     <p>Choose a problem to start solving</p>
   </div>
 
-  <div class="filters-container">
-    <mat-form-field appearance="outline">
-      <mat-label>Search</mat-label>
-      <input matInput [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search for a problem...">
-      <button mat-icon-button matSuffix (click)="onSearch()">
-        <mat-icon>search</mat-icon>
-      </button>
-    </mat-form-field>
+  <div class="filters-section">
+    <div class="filter-group">
+      <label for="search">Search:</label>
+      <input type="text" id="search" [(ngModel)]="searchTerm" (keyup.enter)="onSearch()"
+        placeholder="Search for a problem...">
+      <button class="search-btn" (click)="onSearch()">Search</button>
+    </div>
 
-    <mat-form-field appearance="outline">
-      <mat-label>Difficulty Level</mat-label>
-      <mat-select [(ngModel)]="selectedDifficulty" (selectionChange)="onDifficultyChange()">
-        <mat-option value="">All</mat-option>
-        <mat-option value="Easy">Easy</mat-option>
-        <mat-option value="Medium">Medium</mat-option>
-        <mat-option value="Hard">Hard</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Category</mat-label>
-      <mat-select [(ngModel)]="selectedTag" (selectionChange)="onTagChange()">
-        <mat-option value="">All</mat-option>
-        <mat-option value="Array">Arrays</mat-option>
-        <mat-option value="String">Strings</mat-option>
-        <mat-option value="Hash Table">Hash Tables</mat-option>
-        <mat-option value="Tree">Trees</mat-option>
-        <mat-option value="Dynamic Programming">Dynamic Programming</mat-option>
-      </mat-select>
-    </mat-form-field>
+    <div class="filter-group">
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty" [(ngModel)]="selectedDifficulty" (change)="applyFilters()">
+        <option value="">All</option>
+        <option *ngFor="let level of difficultyLevels" [value]="level.value">
+          {{ level.label }}
+        </option>
+      </select>
+    </div>
   </div>
 
-  <div class="problems-list">
-    <mat-card *ngFor="let problem of filteredProblems" class="problem-card" (click)="navigateToProblem(problem.id)">
-      <mat-card-header>
-        <mat-card-title>{{ problem.title }}</mat-card-title>
-        <span class="difficulty-badge" [ngClass]="problem.difficultyLevel.toLowerCase()">
-          {{ problem.difficultyLevel }}
-        </span>
-      </mat-card-header>
-      
-      <mat-card-content>
-        <p class="problem-description">{{ problem.description | slice:0:150 }}{{ problem.description.length > 150 ? '...' : '' }}</p>
-        
-        <div class="problem-tags" *ngIf="problem.tags && problem.tags.length > 0">
-          <span class="problem-tag" *ngFor="let tag of problem.tags">{{ tag }}</span>
-        </div>
-      </mat-card-content>
-      
-      <mat-card-actions>
-        <div *ngIf="problem.solved" class="status-solved">
-          <mat-icon>check_circle</mat-icon> Solved
-        </div>
-        <div *ngIf="problem.attempted && !problem.solved" class="status-attempted">
-          <mat-icon>history</mat-icon> Attempted
-        </div>
-        <button mat-raised-button color="primary">Solve Problem</button>
-      </mat-card-actions>
-    </mat-card>
-    
-    <div *ngIf="filteredProblems.length === 0" class="no-results">
-      <mat-icon>search_off</mat-icon>
-      <p>No problems found matching the selected criteria</p>
-    </div>
+  <div class="table-container">
+    <table class="problems-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Difficulty</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let problem of filteredProblems" (click)="navigateToProblem(problem.problemId!)"
+          class="problem-row">
+          <td>
+            <div class="problem-title">{{ problem.title }}</div>
+            <div class="problem-description">{{ problem.description | slice:0:100 }}{{ problem.description.length > 100
+              ? '...' : '' }}</div>
+          </td>
+          <td>
+            <span class="difficulty-badge" [ngClass]="'difficulty-' + problem.difficultyLevel">
+              {{ getDifficultyLabel(problem.difficultyLevel) }}
+            </span>
+          </td>
+          <td>
+            <button class="solve-btn" (click)="navigateToProblem(problem.problemId!); $event.stopPropagation()">
+              Solve Problem
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredProblems.length === 0">
+          <td colspan="3" class="no-results">
+            <div class="empty-message">
+              <span class="empty-icon">🔍</span>
+              <p>No problems found matching the search criteria</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>

@@ -1,126 +1,106 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
+
+export enum DifficultyLevel {
+  Easy = 1,
+  Medium = 2,
+  Hard = 3,
+  VeryHard = 4
+}
+
+export interface Problem {
+  problemId?: number;
+  title: string;
+  description: string;
+  constraints?: string;
+  difficultyLevel: DifficultyLevel;
+  testCaseInput: string;
+  testCaseOutput: string;
+  best_Solution: string;
+}
+
+export interface SubmissionResult {
+  success: boolean;
+  output?: string;
+  error?: string;
+  executionTime?: number;
+  memoryUsage?: number;
+}
+
+interface SubmissionRequest {
+  languageId: number;
+  code: string;
+  userId: string;
+  problemId: number;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProblemService {
-  // Temporary problem models for development use
-  private mockProblems = [
-    {
-      id: 1,
-      title: 'Two Sum',
-      description:
-        'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.',
-      difficultyLevel: 'Easy',
-      tags: ['Array', 'Hash Table'],
-      sampleInput: '[2, 7, 11, 15], target = 9',
-      sampleOutput: '[0, 1]',
-      constraints:
-        'You may assume that each input would have exactly one solution, and you may not use the same element twice.',
-    },
-    {
-      id: 2,
-      title: 'Add Two Numbers',
-      description:
-        'You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.',
-      difficultyLevel: 'Medium',
-      tags: ['Linked List', 'Math', 'Recursion'],
-      sampleInput: 'l1 = [2,4,3], l2 = [5,6,4]',
-      sampleOutput: '[7,0,8]',
-      constraints: 'Each linked list has at most 100 nodes.',
-    },
-    {
-      id: 3,
-      title: 'Median of Two Sorted Arrays',
-      description:
-        'Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.',
-      difficultyLevel: 'Hard',
-      tags: ['Array', 'Binary Search', 'Divide and Conquer'],
-      sampleInput: 'nums1 = [1,3], nums2 = [2]',
-      sampleOutput: '2.00000',
-      constraints: 'The overall run time complexity should be O(log (m+n)).',
-    },
-  ];
+  private languageMap: { [key: string]: number } = {
+    javascript: 1,
+    typescript: 2,
+    python: 3,
+    java: 4,
+    csharp: 5,
+  };
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService) { }
 
-  // Get list of problems
-  getProblems(): Observable<any[]> {
-    // In production environment, use apiService
-    // return this.apiService.getProblems();
-
-    // For development, we use temporary data
-    return of(this.mockProblems);
+  getAllProblems(): Observable<Problem[]> {
+    return this.apiService.getProblems();
   }
 
-  // Get a problem by ID
-  getProblem(id: number): Observable<any> {
-    // In production environment, use apiService
-    // return this.apiService.getProblem(id);
-
-    // For development, we use temporary data
-    const problem = this.mockProblems.find((p) => p.id === id);
-    return of(problem);
+  getProblemById(id: number): Observable<Problem> {
+    return this.apiService.getProblem(id);
   }
 
-  // Add a new problem
-  addProblem(problem: any): Observable<any> {
-    // In production environment, use apiService
-    // return this.apiService.addProblem(problem);
-
-    // For development, we add the problem to temporary data
-    const newId = Math.max(...this.mockProblems.map(p => p.id), 0) + 1;
-    const newProblem = { ...problem, id: newId };
-    this.mockProblems.push(newProblem);
-    return of(newProblem);
+  addProblem(problem: Problem): Observable<Problem> {
+    const problemToSend = {
+      ...problem,
+      difficultyLevel: Number(problem.difficultyLevel),
+      constraints: problem.constraints || ''
+    };
+    return this.apiService.addProblem(problemToSend);
   }
 
-  // Update an existing problem
-  updateProblem(id: number, problem: any): Observable<any> {
-    // In production environment, use apiService
-    // return this.apiService.updateProblem(id, problem);
+  updateProblem(id: number, problem: Problem): Observable<Problem> {
+    const problemToSend = {
+      ...problem,
+      difficultyLevel: Number(problem.difficultyLevel),
+      constraints: problem.constraints || ''
+    };
+    return this.apiService.updateProblem(id, problemToSend);
+  }
 
-    // For development, we update the problem in temporary data
-    const index = this.mockProblems.findIndex(p => p.id === id);
-    if (index !== -1) {
-      this.mockProblems[index] = { ...problem, id };
-      return of(this.mockProblems[index]);
+  deleteProblem(id: number): Observable<void> {
+    return this.apiService.deleteProblem(id);
+  }
+
+  submitSolution(problemId: number, code: string, language: string): Observable<SubmissionResult> {
+    const userId = this.getUserId();
+    const languageId = this.mapLanguageToId(language);
+    const request: SubmissionRequest = { languageId, code, userId, problemId };
+    return this.apiService.submitSolution(request);
+  }
+
+  private getUserId(): string {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      console.warn('User ID not found in localStorage. Using default value.');
+      return 'default-user-id';
     }
-    return of(null);
+    return userId;
   }
 
-  // Delete a problem
-  deleteProblem(id: number): Observable<any> {
-    // In production environment, use apiService
-    // return this.apiService.deleteProblem(id);
-
-    // For development, we delete the problem from temporary data
-    const initialLength = this.mockProblems.length;
-    this.mockProblems = this.mockProblems.filter(p => p.id !== id);
-    const success = initialLength > this.mockProblems.length;
-    return of({ success });
-  }
-
-  // Submit a solution for a problem
-  submitSolution(
-    problemId: number,
-    code: string,
-    language: string
-  ): Observable<any> {
-    // return this.apiService.submitSolution(problemId, code, language);
-
-    // Simulate solution submission for development
-    const randomSuccess = Math.random() > 0.3;
-    return of({
-      success: randomSuccess,
-      output: randomSuccess ? 'Test cases passed!' : 'Failed at test case 2',
-      error: randomSuccess ? null : 'Runtime error: index out of bounds',
-      executionTime: Math.floor(Math.random() * 1000),
-      memoryUsed: Math.floor(Math.random() * 100),
-      testCasesPassed: randomSuccess ? 10 : Math.floor(Math.random() * 9),
-      totalTestCases: 10,
-    });
+  private mapLanguageToId(language: string): number {
+    const langId = this.languageMap[language.toLowerCase()];
+    if (!langId) {
+      console.warn(`Language "${language}" not found in language map. Defaulting to ID 1.`);
+      return 1;
+    }
+    return langId;
   }
 }

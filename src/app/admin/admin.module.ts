@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProblemManagementComponent } from './problem-management/problem-management.component';
+import { LanguageManagementComponent } from './language-management/language-management.component';
 import { AdminGuard } from '../guards/admin.guard';
 
 const routes: Routes = [
@@ -22,10 +23,11 @@ const routes: Routes = [
     path: 'admin',
     children: [
       { path: 'problems', component: ProblemManagementComponent },
-      { path: '', redirectTo: 'problems', pathMatch: 'full' }
+      { path: 'languages', component: LanguageManagementComponent },
+      { path: '', redirectTo: 'problems', pathMatch: 'full' },
     ],
-    canActivate: [AdminGuard]
-  }
+    canActivate: [AdminGuard],
+  },
 ];
 
 @NgModule({
@@ -46,8 +48,10 @@ const routes: Routes = [
     MatTableModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    ProblemManagementComponent,
+    LanguageManagementComponent,
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AdminModule { }
+export class AdminModule {}

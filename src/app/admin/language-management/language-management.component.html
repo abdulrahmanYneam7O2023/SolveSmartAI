@@ -1,0 +1,95 @@
+<div class="container">
+  <div class="header-section">
+    <h1 class="admin-title">Language Management</h1>
+    <p class="admin-subtitle">Create and manage programming languages for your platform</p>
+  </div>
+  <div class="row">
+    <!-- Language Form -->
+    <div class="col-md-6">
+      <div class="form-card">
+        <div class="card-header">
+          <h2>{{ editMode ? 'Edit Language' : 'Add New Language' }}</h2>
+        </div>
+        <div class="card-content">
+          <form (ngSubmit)="onSubmit()" [formGroup]="addLanguageForm">
+            <div class="form-field">
+              <label for="name">Name</label>
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                placeholder="Enter language name (e.g., JavaScript)"
+                required
+              />
+              <div class="error" *ngIf="addLanguageForm.get('name')?.hasError('required') && addLanguageForm.get('name')?.touched">
+                Language name is required
+              </div>
+              <div class="error" *ngIf="addLanguageForm.get('name')?.hasError('minlength') && addLanguageForm.get('name')?.touched">
+                Language name must be at least 2 characters
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" (click)="resetForm()" *ngIf="editMode" class="cancel-btn">
+                Cancel
+              </button>
+              <button
+                type="submit"
+                [disabled]="addLanguageForm.invalid"
+                class="submit-btn"
+              >
+                {{ editMode ? 'Update' : 'Add' }} Language
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Languages List -->
+    <div class="col-md-6">
+      <div class="list-card">
+        <div class="card-header">
+          <h2>Languages Library</h2>
+        </div>
+        <div class="card-content">
+          <div class="table-container">
+            <table class="full-width">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let language of languages">
+                  <td>{{ language.languagesId }}</td>
+                  <td>{{ language.name }}</td>
+                  <td>
+                    <button
+                      class="action-btn edit-btn"
+                      (click)="editLanguage(language)"
+                      title="Edit Language"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="action-btn delete-btn"
+                      (click)="deleteLanguage(language.languagesId)"
+                      title="Delete Language"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div *ngIf="languages.length === 0" class="empty-state">
+              <p>No languages available yet</p>
+              <p class="empty-subtitle">Create your first language using the form</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

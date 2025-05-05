@@ -1,188 +1,191 @@
-/* Problem List Component Styles (LeetCode Inspired) */
-
+/* problem-list.component.css - REPLACE COMPLETELY */
 .container {
-  animation: fadeIn 0.3s ease-in-out;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.problems-header {
+.header-section {
   text-align: center;
-  margin-bottom: var(--space-xl);
-  position: relative;
-  padding-bottom: var(--space-md);
+  margin-bottom: 30px;
 }
 
-.problems-header h1 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: var(--space-xs);
-  color: var(--text-primary);
-  letter-spacing: 0.5px;
+.header-section h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 8px;
 }
 
-.problems-header p {
-  font-size: 1.1rem;
-  color: var(--text-secondary);
-  margin-bottom: 0;
+.header-section p {
+  font-size: 16px;
+  color: #666;
 }
 
-.problems-header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 3px;
-  background-color: var(--primary);
-  border-radius: 2px;
-}
-
-.filters-container {
+.filters-section {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-md);
-  margin-bottom: var(--space-xl);
-  background-color: var(--card-bg);
-  padding: var(--space-lg);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border);
+  gap: 15px;
+  margin-bottom: 25px;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 8px;
 }
 
-.filters-container mat-form-field {
+.filter-group {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-width: 200px;
 }
 
-.problems-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: var(--space-lg);
-  margin-top: var(--space-lg);
-}
-
-.problem-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  border-left: 4px solid var(--primary);
-}
-
-.problem-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--primary-light);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.problem-card:hover::before {
-  opacity: 0.5;
-}
-
-.problem-card mat-card-header {
-  padding: var(--space-md) var(--space-md) 0;
-}
-
-.problem-card mat-card-title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin-bottom: var(--space-sm);
-  color: var(--text-primary);
-}
-
-.difficulty-badge {
-  padding: 4px 12px;
-  border-radius: 16px;
-  color: white;
+.filter-group label {
+  margin-bottom: 5px;
   font-weight: 500;
-  font-size: 12px;
-  display: inline-block;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #555;
+}
+
+.filter-group input,
+.filter-group select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.search-btn {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+  align-self: flex-start;
+}
+
+.table-container {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.problems-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.problems-table th {
+  background-color: #f5f5f5;
+  padding: 12px 15px;
+  text-align: right;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+}
+
+.problems-table td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.problem-row {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.problem-row:hover {
+  background-color: #f9f9f9;
+}
+
+.problem-title {
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #333;
 }
 
 .problem-description {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin: var(--space-md) 0;
-  flex-grow: 1;
+  font-size: 14px;
+  color: #666;
 }
 
-.problem-tags {
-  margin-top: var(--space-md);
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-
-.problem-tag {
-  background-color: var(--tertiary-light);
-  color: var(--tertiary);
+.difficulty-badge {
+  display: inline-block;
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
 }
 
-mat-card-actions {
-  padding: var(--space-sm) var(--space-md) var(--space-md);
-  display: flex;
-  justify-content: flex-end;
+.difficulty-badge.easy {
+  background-color: #c8e6c9;
+  color: #2e7d32;
 }
 
-mat-card-actions button {
-  background-color: var(--primary);
-  color: white;
+.difficulty-badge.medium {
+  background-color: #fff9c4;
+  color: #f57f17;
+}
+
+.difficulty-badge.hard {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tag {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 3px 6px;
   border-radius: 4px;
-  padding: 4px 16px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-size: 12px;
 }
 
-mat-card-actions button:hover {
-  background-color: var(--primary-hover);
-  box-shadow: var(--shadow-md);
+.solve-btn {
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-/* Status indicators */
-.status-solved {
-  color: var(--easy);
+.solve-btn:hover {
+  background-color: #1565c0;
+}
+
+.no-results {
+  text-align: center;
+  padding: 30px 0;
+}
+
+.empty-message {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  font-weight: 500;
-  font-size: 0.9rem;
+  color: #757575;
 }
 
-.status-attempted {
-  color: var(--medium);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 500;
-  font-size: 0.9rem;
+.empty-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
 }
 
-/* Responsive adjustments */
+/* تحسين التجاوب */
 @media (max-width: 768px) {
-  .problems-list {
-    grid-template-columns: 1fr;
-  }
-  
-  .filters-container {
+  .filters-section {
     flex-direction: column;
   }
-  
-  .problems-header h1 {
-    font-size: 1.8rem;
+
+  .filter-group {
+    width: 100%;
   }
 }

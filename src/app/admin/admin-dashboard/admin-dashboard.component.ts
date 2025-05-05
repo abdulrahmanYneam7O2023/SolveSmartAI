@@ -13,10 +13,10 @@ import { MatButtonModule } from '@angular/material/button';
     RouterModule,
     MatCardModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.css']
+  styleUrls: ['./admin-dashboard.component.css'],
 })
 export class AdminDashboardComponent {
   adminModules = [
@@ -25,21 +25,28 @@ export class AdminDashboardComponent {
       description: 'Add, edit, delete and view programming problems',
       icon: 'code',
       route: '/admin/problems',
-      color: 'primary'
+      color: 'primary',
+    },
+    {
+      title: 'Language Management',
+      description: 'Add, edit, delete and view programming languages',
+      icon: 'language',
+      route: '/admin/languages',
+      color: 'accent',
     },
     {
       title: 'User Statistics',
       description: 'View user statistics and activities',
       icon: 'bar_chart',
       route: '/admin/statistics',
-      color: 'accent'
+      color: 'accent',
     },
     {
       title: 'User Management',
       description: 'Manage user accounts and permissions',
       icon: 'people',
       route: '/admin/users',
-      color: 'warn'
-    }
+      color: 'warn',
+    },
   ];
 }

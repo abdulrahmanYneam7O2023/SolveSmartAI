@@ -2,18 +2,9 @@
   <div class="problem-header">
     <div class="title-section">
       <h1>{{ problem.title }}</h1>
-      <span
-        class="difficulty-badge"
-        [ngClass]="problem.difficultyLevel.toLowerCase()"
-      >
-        {{ problem.difficultyLevel }}
+      <span class="difficulty-badge" [ngClass]="'difficulty-' + problem.difficultyLevel">
+        {{ getDifficultyLabel(problem.difficultyLevel) }}
       </span>
-    </div>
-
-    <div class="tags-section" *ngIf="problem.tags && problem.tags.length > 0">
-      <span class="problem-tag" *ngFor="let tag of problem.tags">{{
-        tag
-      }}</span>
     </div>
   </div>
 
@@ -27,30 +18,13 @@
         <p>{{ problem.constraints }}</p>
       </div>
 
-      <div
-        *ngIf="problem.examples && problem.examples.length > 0"
-        class="examples"
-      >
-        <h3>Examples</h3>
-        <div
-          class="example"
-          *ngFor="let example of problem.examples; let i = index"
-        >
-          <h4>Example {{ i + 1 }}</h4>
-          <div class="example-content">
-            <div class="example-input">
-              <strong>Input:</strong>
-              <pre>{{ example.input }}</pre>
-            </div>
-            <div class="example-output">
-              <strong>Output:</strong>
-              <pre>{{ example.output }}</pre>
-            </div>
-            <div class="example-explanation" *ngIf="example.explanation">
-              <strong>Explanation:</strong>
-              <p>{{ example.explanation }}</p>
-            </div>
-          </div>
+      <div class="test-cases">
+        <h3>Test Cases</h3>
+        <div class="test-case">
+          <h4>Input:</h4>
+          <pre>{{ problem.testCaseInput }}</pre>
+          <h4>Expected Output:</h4>
+          <pre>{{ problem.testCaseOutput }}</pre>
         </div>
       </div>
     </div>
@@ -59,44 +33,26 @@
       <div class="editor-header">
         <h2>Solution</h2>
         <div class="editor-actions">
-          <mat-form-field appearance="outline" class="language-selector">
-            <mat-label>Programming Language</mat-label>
-            <mat-select
-              [(ngModel)]="selectedLanguage"
-              (selectionChange)="onLanguageChange()"
-            >
-              <mat-option *ngFor="let lang of languages" [value]="lang.value">
+          <div class="language-selector">
+            <label for="language">Programming Language</label>
+            <select id="language" [(ngModel)]="selectedLanguage" (ngModelChange)="onLanguageChange()">
+              <option *ngFor="let lang of languages" [value]="lang.value">
                 {{ lang.viewValue }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+              </option>
+            </select>
+          </div>
         </div>
       </div>
 
       <div class="editor-container">
-        <app-code-editor
-          [(code)]="code"
-          [language]="selectedLanguage"
-        ></app-code-editor>
+        <app-code-editor [(code)]="code" [language]="selectedLanguage"></app-code-editor>
       </div>
 
       <div class="submission-section">
-        <button
-          mat-raised-button
-          class="run-button"
-          (click)="runCode()"
-          [disabled]="isRunning"
-        >
-          <mat-icon>play_arrow</mat-icon>
+        <button class="run-button" (click)="runCode()" [disabled]="isRunning">
           Run
         </button>
-        <button
-          mat-raised-button
-          class="submit-button"
-          (click)="submitSolution()"
-          [disabled]="isSubmitting"
-        >
-          <mat-icon>send</mat-icon>
+        <button class="submit-button" (click)="submitSolution()" [disabled]="isSubmitting">
           Submit Solution
         </button>
       </div>
@@ -108,16 +64,9 @@
       <h3>Results</h3>
     </div>
 
-    <div
-      class="test-case-card"
-      [ngClass]="{ success: result.success, error: !result.success }"
-    >
+    <div class="test-case-card" [ngClass]="{ success: result.success, error: !result.success }">
       <div class="test-case-status">
-        <mat-icon *ngIf="result.success" class="status-passed"
-          >check_circle</mat-icon
-        >
-        <mat-icon *ngIf="!result.success" class="status-failed">error</mat-icon>
-        <span>{{ result.success ? "Success" : "Failed" }}</span>
+        <span>{{ result.success ? 'Success' : 'Failed' }}</span>
       </div>
 
       <div class="test-case-content">
@@ -132,15 +81,10 @@
         </div>
 
         <div class="test-case-stats">
-          <div
-            *ngIf="result.executionTime !== undefined"
-            class="test-case-stat"
-          >
-            <mat-icon>timer</mat-icon>
+          <div *ngIf="result.executionTime !== undefined" class="test-case-stat">
             <span>Execution Time: {{ result.executionTime }} ms</span>
           </div>
           <div *ngIf="result.memoryUsage !== undefined" class="test-case-stat">
-            <mat-icon>memory</mat-icon>
             <span>Memory Usage: {{ result.memoryUsage }} MB</span>
           </div>
         </div>
@@ -150,5 +94,5 @@
 </div>
 
 <div class="loading-overlay" *ngIf="isLoading">
-  <mat-spinner class="loading-spinner"></mat-spinner>
+  <div class="loading-spinner"></div>
 </div>

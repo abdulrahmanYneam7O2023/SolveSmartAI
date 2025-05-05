@@ -1,32 +1,83 @@
-<p>problems works!</p>
-<form [formGroup]="problemForm" (ngSubmit)="onSubmit()" class="container mt-4">
+<!-- problems.component.html - REPLACE COMPLETELY -->
+<div class="container mt-4">
   <h2>{{ isEditMode ? 'Edit Problem' : 'Add New Problem' }}</h2>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Title</mat-label>
-    <input matInput formControlName="title" required>
-    <mat-error *ngIf="problemForm.get('title')?.invalid">Title is required</mat-error>
-  </mat-form-field>
+  <form [formGroup]="problemForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title" required>
+      <mat-error *ngIf="problemForm.get('title')?.invalid">Title is required</mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Description</mat-label>
-    <textarea matInput formControlName="description" required rows="4"></textarea>
-    <mat-error *ngIf="problemForm.get('description')?.invalid">Description is required (max 1000 chars)</mat-error>
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" required rows="4"></textarea>
+      <mat-error *ngIf="problemForm.get('description')?.invalid">Description is required (max 1000 chars)</mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Constraints (Optional)</mat-label>
-    <input matInput formControlName="constraints">
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Constraints (Optional)</mat-label>
+      <input matInput formControlName="constraints">
+      <mat-error *ngIf="problemForm.get('constraints')?.invalid">Constraints max 500 chars</mat-error>
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="w-100">
-    <mat-label>Difficulty Level</mat-label>
-    <mat-select formControlName="difficultyLevel" required>
-      <mat-option *ngFor="let level of difficultyLevels" [value]="level">{{ level }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Difficulty Level</mat-label>
+      <mat-select formControlName="difficultyLevel" required>
+        <mat-option *ngFor="let level of difficultyLevels" [value]="level">{{ level }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="problemForm.get('difficultyLevel')?.invalid">Difficulty level is required</mat-error>
+    </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit" [disabled]="problemForm.invalid">
-    {{ isEditMode ? 'Update' : 'Save' }}
-  </button>
-</form>
+    <div class="form-field">
+      <mat-label>Tags</mat-label>
+      <div class="tags-container">
+        <!-- تصحيح الخطأ باستخدام div بدلاً من mat-chip-list -->
+        <div class="tags-list">
+          <div class="tag-chip" *ngFor="let tag of problemForm.get('tags')!.value">
+            {{ tag }}
+            <button type="button" class="tag-remove-btn" (click)="removeTag(tag)">
+              <span class="tag-remove-icon">×</span>
+            </button>
+          </div>
+        </div>
+        <div *ngIf="problemForm.get('tags')!.value.length === 0" class="empty-tags-message">
+          No tags selected yet
+        </div>
+      </div>
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Add a tag</mat-label>
+        <mat-select #tagSelect (selectionChange)="addTag(tagSelect.value); tagSelect.value = ''">
+          <mat-option value="" disabled>Add a tag</mat-option>
+          <mat-option *ngFor="let tag of availableTags" [value]="tag">{{ tag }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Test Case Input</mat-label>
+      <textarea matInput formControlName="testCaseInput" required rows="2"></textarea>
+      <mat-error *ngIf="problemForm.get('testCaseInput')?.invalid">Test case input is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Test Case Output</mat-label>
+      <textarea matInput formControlName="testCaseOutput" required rows="2"></textarea>
+      <mat-error *ngIf="problemForm.get('testCaseOutput')?.invalid">Test case output is required</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="w-100">
+      <mat-label>Best Solution (Optional)</mat-label>
+      <textarea matInput formControlName="best_Solution" rows="4"></textarea>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-raised-button color="warn" type="button" (click)="resetForm()" *ngIf="isEditMode">
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="problemForm.invalid">
+        {{ isEditMode ? 'Update' : 'Save' }}
+      </button>
+    </div>
+  </form>
+</div>

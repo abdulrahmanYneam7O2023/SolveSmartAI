@@ -1,4 +1,9 @@
-<div class="chatbot-container">
+
+
+<div class="chatbot-icon" (click)="toggleChatbot()">🤖</div>
+
+
+<div class="chatbot-container" [ngClass]="{ 'show': isChatbotVisible }">
   <div class="chat-header">
     🤖 AI Chatbot
   </div>
