@@ -1,8 +1,146 @@
 /* problem-management.component.css - REPLACE COMPLETELY */
 .container {
+  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.form-section {
+  background: white;
   padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-primary {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.problems-list {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.difficulty-badge {
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
+}
+
+.level-0 {
+  background-color: #4caf50;
+}
+
+.level-1 {
+  background-color: #ff9800;
+}
+
+.level-2 {
+  background-color: #f44336;
+}
+
+.level-3 {
+  background-color: #9c27b0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-edit {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-edit:hover,
+.btn-delete:hover {
+  opacity: 0.9;
 }
 
 .problem-form {
@@ -13,77 +151,10 @@
   margin-bottom: 30px;
 }
 
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: 500;
-  color: #333;
-}
-
-.form-control {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
 .error-message {
   color: #dc3545;
   font-size: 12px;
   margin-top: 5px;
-}
-
-.form-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-
-.btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-}
-
-.btn-primary:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background-color: #545b62;
-}
-
-.problems-list {
-  margin-top: 30px;
 }
 
 .problem-card {
@@ -106,33 +177,6 @@
   color: #333;
 }
 
-.difficulty-badge {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.difficulty-1 {
-  background-color: #28a745;
-  color: white;
-}
-
-.difficulty-2 {
-  background-color: #ffc107;
-  color: #000;
-}
-
-.difficulty-3 {
-  background-color: #fd7e14;
-  color: white;
-}
-
-.difficulty-4 {
-  background-color: #dc3545;
-  color: white;
-}
-
 .problem-description {
   color: #666;
   margin-bottom: 15px;
@@ -141,24 +185,6 @@
 .problem-actions {
   display: flex;
   gap: 10px;
-}
-
-.btn-edit {
-  background-color: #17a2b8;
-  color: white;
-}
-
-.btn-edit:hover {
-  background-color: #138496;
-}
-
-.btn-delete {
-  background-color: #dc3545;
-  color: white;
-}
-
-.btn-delete:hover {
-  background-color: #c82333;
 }
 
 .no-problems {
@@ -224,82 +250,10 @@
   margin-bottom: 20px;
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #555;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-textarea {
-  resize: vertical;
-}
-
 .error {
   color: #d32f2f;
   font-size: 12px;
   margin-top: 4px;
-}
-
-.table-container {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-th {
-  background-color: #f5f5f5;
-  font-weight: 600;
-  color: #333;
-}
-
-.action-btn {
-  padding: 6px 12px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  margin-right: 5px;
-}
-
-.edit-btn {
-  background: #2196f3;
-  color: white;
-}
-
-.delete-btn {
-  background: #f44336;
-  color: white;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 30px 0;
-  color: #757575;
-}
-
-.empty-subtitle {
-  font-size: 14px;
-  margin-top: 8px;
 }
 
 .tags-container {

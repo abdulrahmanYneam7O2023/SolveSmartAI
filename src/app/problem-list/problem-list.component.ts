@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { Router, RouterModule } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProblemService, Problem, DifficultyLevel } from '../services/problem.service';
 
 @Component({
@@ -27,6 +28,7 @@ import { ProblemService, Problem, DifficultyLevel } from '../services/problem.se
     MatButtonModule,
     MatChipsModule,
     RouterModule,
+    MatSnackBarModule
   ],
   templateUrl: './problem-list.component.html',
   styleUrls: ['./problem-list.component.css'],
@@ -44,7 +46,11 @@ export class ProblemListComponent implements OnInit {
   filteredProblems: Problem[] = [];
   isLoading: boolean = true;
 
-  constructor(private problemService: ProblemService, private router: Router) { }
+  constructor(
+    private problemService: ProblemService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     this.loadProblems();
@@ -52,52 +58,40 @@ export class ProblemListComponent implements OnInit {
 
   loadProblems(): void {
     this.isLoading = true;
-    this.problemService.getAllProblems().subscribe({
+    this.problemService.getProblems().subscribe({
       next: (problems: Problem[]) => {
         this.problems = problems;
         this.filteredProblems = problems;
         this.isLoading = false;
-        this.applyFilters();
       },
-      error: (error: unknown) => {
+      error: (error: any) => {
         console.error('Error loading problems:', error);
         this.isLoading = false;
-      },
+        this.showError('Failed to load problems. Please try again later.');
+      }
     });
   }
 
   onSearch(): void {
-    console.log('Searching for:', this.searchTerm);
-    this.filterProblems();
+    this.applyFilters();
   }
 
   onDifficultyChange(): void {
-    console.log('Difficulty changed to:', this.selectedDifficulty);
-    this.filterProblems();
-  }
-
-  filterProblems(): void {
-    this.filteredProblems = this.problems.filter((problem) => {
-      const matchesSearch =
-        !this.searchTerm ||
-        problem.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        problem.description
-          .toLowerCase()
-          .includes(this.searchTerm.toLowerCase());
-      const matchesDifficulty =
-        !this.selectedDifficulty ||
-        problem.difficultyLevel === this.selectedDifficulty;
-
-      return matchesSearch && matchesDifficulty;
-    });
+    this.applyFilters();
   }
 
   applyFilters(): void {
     this.filteredProblems = this.problems.filter(problem => {
-      if (this.selectedDifficulty && problem.difficultyLevel !== this.selectedDifficulty) {
-        return false;
-      }
-      return true;
+      // Filter by search term
+      const matchesSearch = !this.searchTerm ||
+        problem.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        problem.description.toLowerCase().includes(this.searchTerm.toLowerCase());
+
+      // Filter by difficulty
+      const matchesDifficulty = !this.selectedDifficulty ||
+        problem.difficultyLevel === this.selectedDifficulty;
+
+      return matchesSearch && matchesDifficulty;
     });
   }
 
@@ -107,22 +101,29 @@ export class ProblemListComponent implements OnInit {
   }
 
   navigateToProblem(id: number): void {
-    console.log('Navigating to problem with id:', id);
     this.router.navigate(['/problem-detail', id]);
   }
 
   openProblemForm(): void {
+    // TODO: Implement problem creation dialog
     console.log('Opening problem form...');
-    // Logic can be added to open a new problem creation dialog
   }
 
   editProblem(problem: Problem): void {
+    // TODO: Implement problem editing
     console.log('Editing problem:', problem);
-    // Logic can be added to edit the problem
   }
 
   deleteProblem(id: number): void {
+    // TODO: Implement problem deletion
     console.log('Deleting problem with id:', id);
-    // Logic can be added to delete the problem
+  }
+
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
+    });
   }
 }

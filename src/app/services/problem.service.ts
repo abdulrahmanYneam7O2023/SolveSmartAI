@@ -1,29 +1,35 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { ApiService } from './api.service';
 
 export enum DifficultyLevel {
-  Easy = 1,
-  Medium = 2,
-  Hard = 3,
-  VeryHard = 4
+  Easy = 0,
+  Medium = 1,
+  Hard = 2,
+  VeryHard = 3
 }
 
 export interface Problem {
-  problemId?: number;
+  id: number;
   title: string;
   description: string;
-  constraints?: string;
   difficultyLevel: DifficultyLevel;
   testCaseInput: string;
   testCaseOutput: string;
+  constraints: string;
   best_Solution: string;
 }
 
 export interface SubmissionResult {
   success: boolean;
-  output?: string;
-  error?: string;
+  message: string;
+  testResults?: {
+    input: string;
+    expected: string;
+    actual: string;
+    passed: boolean;
+  }[];
   executionTime?: number;
   memoryUsage?: number;
 }
@@ -36,7 +42,7 @@ interface SubmissionRequest {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class ProblemService {
   private languageMap: { [key: string]: number } = {
@@ -49,30 +55,20 @@ export class ProblemService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllProblems(): Observable<Problem[]> {
+  getProblems(): Observable<Problem[]> {
     return this.apiService.getProblems();
   }
 
-  getProblemById(id: number): Observable<Problem> {
+  getProblem(id: number): Observable<Problem> {
     return this.apiService.getProblem(id);
   }
 
   addProblem(problem: Problem): Observable<Problem> {
-    const problemToSend = {
-      ...problem,
-      difficultyLevel: Number(problem.difficultyLevel),
-      constraints: problem.constraints || ''
-    };
-    return this.apiService.addProblem(problemToSend);
+    return this.apiService.addProblem(problem);
   }
 
-  updateProblem(id: number, problem: Problem): Observable<Problem> {
-    const problemToSend = {
-      ...problem,
-      difficultyLevel: Number(problem.difficultyLevel),
-      constraints: problem.constraints || ''
-    };
-    return this.apiService.updateProblem(id, problemToSend);
+  updateProblem(id: string, problem: Problem): Observable<Problem> {
+    return this.apiService.updateProblem(id, problem);
   }
 
   deleteProblem(id: number): Observable<void> {
@@ -80,10 +76,13 @@ export class ProblemService {
   }
 
   submitSolution(problemId: number, code: string, language: string): Observable<SubmissionResult> {
-    const userId = this.getUserId();
-    const languageId = this.mapLanguageToId(language);
-    const request: SubmissionRequest = { languageId, code, userId, problemId };
-    return this.apiService.submitSolution(request);
+    const submission: SubmissionRequest = {
+      problemId,
+      code,
+      languageId: this.mapLanguageToId(language),
+      userId: this.getUserId()
+    };
+    return this.apiService.submitSolution(submission);
   }
 
   private getUserId(): string {

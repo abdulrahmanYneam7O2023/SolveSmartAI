@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { jwtDecode } from "jwt-decode";
+import { UserData } from '../../shared/interfaces/user-data';
 
 
 @Component({
@@ -17,7 +19,7 @@ export class SigninComponent {
   signInForm!:FormGroup
   isCalingApi:boolean = false
   loginIsSuccess:boolean = false
-
+  
   constructor( private  formBuilder : FormBuilder,private _AuthService : AuthService  , private _router : Router) {
     this.signInForm = this.formBuilder.group({
       email: ['', [Validators.required]],
@@ -32,6 +34,9 @@ export class SigninComponent {
         this.isCalingApi = false;
         this.loginIsSuccess = true;
         console.log(res);
+        localStorage.setItem('token', res.token);
+        this._AuthService.userData = jwtDecode(localStorage.getItem('token')!);
+        console.log( this._AuthService.userData);
         setTimeout(() => {
           this._router.navigate(['/home']);
         },500);

@@ -33,7 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let problem of filteredProblems" (click)="navigateToProblem(problem.problemId!)"
+        <tr *ngFor="let problem of filteredProblems" (click)="navigateToProblem(problem.id)"
           class="problem-row">
           <td>
             <div class="problem-title">{{ problem.title }}</div>
@@ -41,12 +41,12 @@
               ? '...' : '' }}</div>
           </td>
           <td>
-            <span class="difficulty-badge" [ngClass]="'difficulty-' + problem.difficultyLevel">
+            <span class="difficulty-badge text-black">
               {{ getDifficultyLabel(problem.difficultyLevel) }}
             </span>
           </td>
           <td>
-            <button class="solve-btn" (click)="navigateToProblem(problem.problemId!); $event.stopPropagation()">
+            <button class="solve-btn" (click)="navigateToProblem(problem.id); $event.stopPropagation()">
               Solve Problem
             </button>
           </td>

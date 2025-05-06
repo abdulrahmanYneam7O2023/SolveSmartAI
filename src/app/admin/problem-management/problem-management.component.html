@@ -1,138 +1,96 @@
 <!-- problem-management.component.html -->
 <div class="container">
-  <div class="header-section">
-    <h1 class="admin-title">Problem Management</h1>
-    <p class="admin-subtitle">Create and manage coding challenges for your platform</p>
+  <h1>Problem Management</h1>
+
+  <!-- Problem Form -->
+  <div class="form-section">
+    <h2>{{ editMode ? 'Edit Problem' : 'Add New Problem' }}</h2>
+    <form [formGroup]="addProblemForm" >
+      <div class="form-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" formControlName="title" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" formControlName="description" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="difficultyLevel">Difficulty</label>
+        <select id="difficultyLevel" formControlName="difficultyLevel" required>
+          <option *ngFor="let level of difficultyLevels" [value]="level.value">
+            {{ level.label }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="testCaseInput">Test Case Input</label>
+        <textarea id="testCaseInput" formControlName="testCaseInput" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="testCaseOutput">Test Case Output</label>
+        <textarea id="testCaseOutput" formControlName="testCaseOutput" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="constraints">Constraints</label>
+        <textarea id="constraints" formControlName="constraints"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="best_Solution">Best Solution</label>
+        <textarea id="best_Solution" formControlName="best_Solution" required></textarea>
+      </div>
+
+      <div class="form-actions">
+        @if (editMode) {
+          <button type="submit"  class="btn-primary" (click)="updateProblem()" [disabled]="!addProblemForm.valid">
+            Update Problem
+          </button>
+        }@else {
+          <button type="submit" (click)="onSubmit()"  class="btn-primary" [disabled]="!addProblemForm.valid">
+            Add Problem
+          </button>
+        }
+
+
+        <button type="button" class="btn-secondary" (click)="resetForm()">Cancel</button>
+      </div>
+    </form>
   </div>
-  <div class="row">
-    <!-- Problem Form -->
-    <div class="col-md-6">
-      <div class="form-card">
-        <div class="card-header">
-          <h2>{{ editMode ? 'Edit Problem' : 'Add New Problem' }}</h2>
-        </div>
-        <div class="card-content">
-          <form [formGroup]="addProblemForm" (ngSubmit)="onSubmit()" class="problem-form">
-            <div class="form-group">
-              <label for="title">Title</label>
-              <input type="text" id="title" formControlName="title" class="form-control">
-              <div *ngIf="addProblemForm.get('title')?.invalid && addProblemForm.get('title')?.touched"
-                class="error-message">
-                Title is required and must be at least 2 characters long
-              </div>
-            </div>
 
-            <div class="form-group">
-              <label for="description">Description</label>
-              <textarea id="description" formControlName="description" class="form-control" rows="4"></textarea>
-              <div *ngIf="addProblemForm.get('description')?.invalid && addProblemForm.get('description')?.touched"
-                class="error-message">
-                Description is required
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="difficultyLevel">Difficulty Level</label>
-              <select id="difficultyLevel" formControlName="difficultyLevel" class="form-control">
-                <option *ngFor="let level of difficultyLevels" [value]="level.value">
-                  {{ level.label }}
-                </option>
-              </select>
-              <div
-                *ngIf="addProblemForm.get('difficultyLevel')?.invalid && addProblemForm.get('difficultyLevel')?.touched"
-                class="error-message">
-                Difficulty level is required
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="testCaseInput">Test Case Input</label>
-              <textarea id="testCaseInput" formControlName="testCaseInput" class="form-control" rows="3"></textarea>
-              <div *ngIf="addProblemForm.get('testCaseInput')?.invalid && addProblemForm.get('testCaseInput')?.touched"
-                class="error-message">
-                Test case input is required
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="testCaseOutput">Test Case Output</label>
-              <textarea id="testCaseOutput" formControlName="testCaseOutput" class="form-control" rows="3"></textarea>
-              <div
-                *ngIf="addProblemForm.get('testCaseOutput')?.invalid && addProblemForm.get('testCaseOutput')?.touched"
-                class="error-message">
-                Test case output is required
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="constraints">Constraints</label>
-              <textarea id="constraints" formControlName="constraints" class="form-control" rows="2"></textarea>
-            </div>
-
-            <div class="form-group">
-              <label for="best_Solution">Best Solution</label>
-              <textarea id="best_Solution" formControlName="best_Solution" class="form-control" rows="4"></textarea>
-              <div *ngIf="addProblemForm.get('best_Solution')?.invalid && addProblemForm.get('best_Solution')?.touched"
-                class="error-message">
-                Best solution is required
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit" [disabled]="addProblemForm.invalid" class="btn btn-primary">
-                {{ editMode ? 'Update Problem' : 'Add Problem' }}
+  <!-- Problems List -->
+  <div class="problems-list">
+    <h2>Problems List</h2>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let problem of problems ; let i = index">
+            <td>{{ problem.title }}</td>
+            <td>
+              <span class="difficulty-badge" [ngClass]="'level-' + problem.difficultyLevel">
+                {{ getDifficultyLabel(problem.difficultyLevel) }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-edit" (click)="editProblem(problem , i)">Edit</button>
+              <button class="action-btn delete-btn" (click)="deleteProblem(problem)" title="Delete Problem">
+                Delete
               </button>
-              <button type="button" (click)="resetForm()" class="btn btn-secondary">Cancel</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    <!-- Problems List -->
-    <div class="col-md-6">
-      <div class="list-card">
-        <div class="card-header">
-          <h2>Problems Library</h2>
-        </div>
-        <div class="card-content">
-          <div class="table-container">
-            <table class="full-width">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Title</th>
-                  <th>Difficulty</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let problem of problems">
-                  <td>{{ problem.problemId }}</td>
-                  <td>{{ problem.title }}</td>
-                  <td>
-                    <span class="difficulty-badge" [ngClass]="'level-' + problem.difficultyLevel">
-                      {{ getDifficultyLabel(problem.difficultyLevel) }}
-                    </span>
-                  </td>
-                  <td>
-                    <button class="action-btn edit-btn" (click)="editProblem(problem)" title="Edit Problem">
-                      Edit
-                    </button>
-                    <button class="action-btn delete-btn" (click)="deleteProblem(problem.problemId!)"
-                      title="Delete Problem">
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div *ngIf="problems.length === 0" class="empty-state">
-              <p>No problems available yet</p>
-              <p class="empty-subtitle">Create your first problem using the form</p>
-            </div>
-          </div>
-        </div>
-      </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

@@ -1,141 +1,123 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { CodeEditorComponent } from '../code-editor/code-editor.component';
-import { ProblemService, Problem, SubmissionResult, DifficultyLevel } from '../services/problem.service';
+import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ProblemService, Problem, DifficultyLevel, SubmissionResult } from '../services/problem.service';
+import { CodeEditorComponent } from '../components/code-editor/code-editor.component';
+import { AuthService } from '../services/auth.service';
 import { ApiService } from '../services/api.service';
 
 @Component({
   selector: 'app-problem-detail',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatChipsModule,
-    MatDividerModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatButtonModule,
-    MatIconModule,
-    CodeEditorComponent,
-    MatProgressSpinnerModule,
-  ],
+  imports: [CommonModule, FormsModule, MatSnackBarModule, CodeEditorComponent],
   templateUrl: './problem-detail.component.html',
-  styleUrls: ['./problem-detail.component.css'],
+  styleUrls: ['./problem-detail.component.css']
 })
 export class ProblemDetailComponent implements OnInit {
   problem: Problem | null = null;
-  selectedLanguage: string = '';
-  code: string = '';
-  isSubmitting: boolean = false;
-  isLoading: boolean = true;
-  isRunning: boolean = false;
-  result: SubmissionResult | null = null;
   problemId: number = 0;
-  languages: { value: string; viewValue: string }[] = [];
-  difficultyLevels = [
-    { value: DifficultyLevel.Easy, label: 'Easy' },
-    { value: DifficultyLevel.Medium, label: 'Medium' },
-    { value: DifficultyLevel.Hard, label: 'Hard' },
-    { value: DifficultyLevel.VeryHard, label: 'Very Hard' }
+  code: string = '';
+  selectedLanguage: string = 'javascript';
+  isRunning: boolean = false;
+  isSubmitting: boolean = false;
+  isLoading: boolean = false;
+  result: SubmissionResult | null = null;
+
+  languages = [
+    { value: '14', label: 'TypeScript' },
+  
   ];
 
   constructor(
     private route: ActivatedRoute,
     private problemService: ProblemService,
-    private apiService: ApiService
+    private snackBar: MatSnackBar,
+    private ApiService: ApiService,
+    private AuthService: AuthService,
   ) { }
 
   ngOnInit(): void {
-    const problemId = this.route.snapshot.paramMap.get('id');
-    if (problemId) {
-      this.problemId = Number(problemId);
-      this.loadProblem();
-      this.loadLanguages();
-    }
+    this.route.paramMap.subscribe(params => {
+      this.problemId = +params.get('id')!;
+      console.log('Problem ID:', this.problemId);
+    })
+    this.loadProblem();
   }
 
   loadProblem(): void {
     this.isLoading = true;
-    this.problemService.getProblemById(this.problemId).subscribe({
-      next: (problem: Problem) => {
+    this.problemService.getProblem(this.problemId).subscribe({
+      next: (problem) => {
         this.problem = problem;
         this.isLoading = false;
       },
-      error: (error: unknown) => {
-        console.error('Error loading problem:', error);
+      error: (error) => {
+        this.showMessage('Error loading problem: ' + error.message);
         this.isLoading = false;
-      },
-    });
-  }
-
-  loadLanguages(): void {
-    this.apiService.getLanguages().subscribe({
-      next: (languages) => {
-        this.languages = languages.map((lang: any) => ({
-          value: lang.name.toLowerCase(),
-          viewValue: lang.name,
-        }));
-        if (this.languages.length > 0) {
-          this.selectedLanguage = this.languages[0].value;
-        }
-      },
-      error: (error: unknown) => {
-        console.error('Error loading languages:', error);
-      },
+      }
     });
   }
 
   onLanguageChange(): void {
-    console.log('Language changed to:', this.selectedLanguage);
+    // Reset code when language changes
+    this.code = '';
+    this.result = null;
   }
 
   runCode(): void {
+    if (!this.code.trim()) {
+      this.showMessage('Please write some code first');
+      return;
+    }
+
     this.isRunning = true;
-    this.problemService
-      .submitSolution(this.problemId, this.code, this.selectedLanguage)
-      .subscribe({
-        next: (result: SubmissionResult) => {
-          this.result = result;
-          this.isRunning = false;
-        },
-        error: (error: unknown) => {
-          console.error('Error running code:', error);
-          this.isRunning = false;
-          this.result = { success: false, error: 'An error occurred while running your code' };
-        },
-      });
+    this.problemService.submitSolution(this.problemId, this.code, this.selectedLanguage).subscribe({
+      next: (result) => {
+        this.result = result;
+        this.isRunning = false;
+      },
+      error: (error) => {
+        this.showMessage('Error running code: ' + error.message);
+        this.isRunning = false;
+      }
+    });
   }
 
   submitSolution(): void {
+    
+
     this.isSubmitting = true;
-    this.problemService
-      .submitSolution(this.problemId, this.code, this.selectedLanguage)
-      .subscribe({
-        next: (result: SubmissionResult) => {
-          this.result = result;
-          this.isSubmitting = false;
-        },
-        error: (error: unknown) => {
-          console.error('Error submitting solution:', error);
-          this.isSubmitting = false;
-          this.result = { success: false, error: 'An error occurred while submitting your solution' };
-        },
-      });
+
+    this.ApiService.submitSolut(14 , this.code ,this.AuthService.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ,this.problemId ).subscribe({
+      next: (result) => {
+        this.isSubmitting = false;
+        this.showMessage('Solution submitted successfully');
+      },
+      error: (error) => {
+        this.showMessage('Error submitting solution: ' + error.message);
+        this.isSubmitting = false;
+      }
+    })
+   
   }
 
   getDifficultyLabel(level: DifficultyLevel): string {
-    const difficulty = this.difficultyLevels.find(l => l.value === level);
-    return difficulty ? difficulty.label : 'Unknown';
+    const labels = {
+      [DifficultyLevel.Easy]: 'Easy',
+      [DifficultyLevel.Medium]: 'Medium',
+      [DifficultyLevel.Hard]: 'Hard',
+      [DifficultyLevel.VeryHard]: 'Very Hard'
+    };
+    return labels[level] || 'Unknown';
+  }
+
+  private showMessage(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom'
+    });
   }
 }

@@ -1,98 +1,101 @@
-<div class="container" *ngIf="problem">
-  <div class="problem-header">
-    <div class="title-section">
-      <h1>{{ problem.title }}</h1>
-      <span class="difficulty-badge" [ngClass]="'difficulty-' + problem.difficultyLevel">
+<div class="container mt-4">
+  <div *ngIf="problem" class="problem-detail">
+    <div class="problem-header">
+      <h2>{{ problem.title }}</h2>
+      <span class="difficulty-badge" [ngClass]="'level-' + problem.difficultyLevel">
         {{ getDifficultyLabel(problem.difficultyLevel) }}
       </span>
     </div>
-  </div>
 
-  <div class="problem-content">
-    <div class="problem-description">
-      <h2>Problem Description</h2>
-      <p>{{ problem.description }}</p>
+    <div class="problem-content">
+      <div class="description-section">
+        <h3>Description</h3>
+        <p>{{ problem.description }}</p>
 
-      <div *ngIf="problem.constraints" class="constraints">
-        <h3>Constraints</h3>
-        <p>{{ problem.constraints }}</p>
-      </div>
+        <div class="test-cases">
+          <h4>Test Cases</h4>
+          <div class="test-case">
+            <h5>Input:</h5>
+            <pre>{{ problem.testCaseInput }}</pre>
+          </div>
+          <div class="test-case">
+            <h5>Expected Output:</h5>
+            <pre>{{ problem.testCaseOutput }}</pre>
+          </div>
+        </div>
 
-      <div class="test-cases">
-        <h3>Test Cases</h3>
-        <div class="test-case">
-          <h4>Input:</h4>
-          <pre>{{ problem.testCaseInput }}</pre>
-          <h4>Expected Output:</h4>
-          <pre>{{ problem.testCaseOutput }}</pre>
+        <div *ngIf="problem.constraints" class="constraints">
+          <h4>Constraints:</h4>
+          <p>{{ problem.constraints }}</p>
         </div>
       </div>
-    </div>
 
-    <div class="code-editor-section">
-      <div class="editor-header">
-        <h2>Solution</h2>
-        <div class="editor-actions">
-          <div class="language-selector">
-            <label for="language">Programming Language</label>
-            <select id="language" [(ngModel)]="selectedLanguage" (ngModelChange)="onLanguageChange()">
-              <option *ngFor="let lang of languages" [value]="lang.value">
-                {{ lang.viewValue }}
-              </option>
-            </select>
+      <div class="solution-section">
+        <div class="language-selector">
+          <label for="language">Select Language:</label>
+          <select id="language" [(ngModel)]="selectedLanguage" (ngModelChange)="onLanguageChange()">
+            <option *ngFor="let lang of languages" [value]="lang.value">
+              {{ lang.label }}
+            </option>
+          </select>
+        </div>
+
+        <div class="code-editor-container">
+          <app-code-editor [(code)]="code" [language]="selectedLanguage"></app-code-editor>
+        </div>
+
+        <div class="action-buttons">
+          <button class="run-button" (click)="runCode()" [disabled]="isRunning">
+            {{ isRunning ? 'Running...' : 'Run Code' }}
+          </button>
+          <button class="submit-button" (click)="submitSolution()" >
+            {{ isSubmitting ? 'Submitting...' : 'Submit Solution' }}
+          </button>
+        </div>
+
+        <div class="test-cases" *ngIf="result">
+          <div class="result-card" [ngClass]="{ success: result.success, error: !result.success }">
+            <div class="result-header">
+              <span>{{ result.success ? 'Success' : 'Failed' }}</span>
+              <p>{{ result.message }}</p>
+            </div>
+
+            <div *ngIf="result.testResults && result.testResults.length > 0" class="test-results">
+              <div *ngFor="let test of result.testResults" class="test-case-result">
+                <div class="test-input">
+                  <h5>Input:</h5>
+                  <pre>{{ test.input }}</pre>
+                </div>
+                <div class="test-expected">
+                  <h5>Expected Output:</h5>
+                  <pre>{{ test.expected }}</pre>
+                </div>
+                <div class="test-actual">
+                  <h5>Actual Output:</h5>
+                  <pre>{{ test.actual }}</pre>
+                </div>
+                <div class="test-status" [ngClass]="{ 'passed': test.passed, 'failed': !test.passed }">
+                  {{ test.passed ? '✓ Test Passed' : '✗ Test Failed' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="test-case-metrics">
+              <div *ngIf="result.executionTime !== undefined" class="metric">
+                <span>Execution Time: {{ result.executionTime }} ms</span>
+              </div>
+              <div *ngIf="result.memoryUsage !== undefined" class="metric">
+                <span>Memory Usage: {{ result.memoryUsage }} MB</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="editor-container">
-        <app-code-editor [(code)]="code" [language]="selectedLanguage"></app-code-editor>
-      </div>
-
-      <div class="submission-section">
-        <button class="run-button" (click)="runCode()" [disabled]="isRunning">
-          Run
-        </button>
-        <button class="submit-button" (click)="submitSolution()" [disabled]="isSubmitting">
-          Submit Solution
-        </button>
-      </div>
     </div>
   </div>
 
-  <div class="test-cases" *ngIf="result">
-    <div class="test-case-header">
-      <h3>Results</h3>
-    </div>
-
-    <div class="test-case-card" [ngClass]="{ success: result.success, error: !result.success }">
-      <div class="test-case-status">
-        <span>{{ result.success ? 'Success' : 'Failed' }}</span>
-      </div>
-
-      <div class="test-case-content">
-        <div *ngIf="result.output" class="test-case-result">
-          <strong>Output:</strong>
-          <pre>{{ result.output }}</pre>
-        </div>
-
-        <div *ngIf="result.error" class="test-case-error">
-          <strong>Error:</strong>
-          <pre>{{ result.error }}</pre>
-        </div>
-
-        <div class="test-case-stats">
-          <div *ngIf="result.executionTime !== undefined" class="test-case-stat">
-            <span>Execution Time: {{ result.executionTime }} ms</span>
-          </div>
-          <div *ngIf="result.memoryUsage !== undefined" class="test-case-stat">
-            <span>Memory Usage: {{ result.memoryUsage }} MB</span>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading problem details...</p>
   </div>
-</div>
-
-<div class="loading-overlay" *ngIf="isLoading">
-  <div class="loading-spinner"></div>
 </div>
