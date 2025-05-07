@@ -27,7 +27,7 @@ export class ProblemDetailComponent implements OnInit {
 
   languages = [
     { value: '14', label: 'TypeScript' },
-  
+
   ];
 
   constructor(
@@ -85,22 +85,54 @@ export class ProblemDetailComponent implements OnInit {
     });
   }
 
+  // submitSolution(): void {
+
+
+  //   this.isSubmitting = true;
+
+  //   this.ApiService.submitSolut(14 , this.code ,this.AuthService.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ,this.problemId ).subscribe({
+  //     next: (result) => {
+  //       this.isSubmitting = false;
+  //       this.showMessage('Solution submitted successfully');
+  //     },
+  //     error: (error) => {
+  //       this.showMessage('Error submitting solution: ' + error.message);
+  //       this.isSubmitting = false;
+  //     }
+  //   })
+
+  // }
+
   submitSolution(): void {
-    
+    if (!this.problem?.id) {
+      this.showMessage('Invalid problem ID');
+      return;
+    }
+
+    if (!this.code.trim()) {
+      this.showMessage('Please write some code first');
+      return;
+    }
 
     this.isSubmitting = true;
+    this.result = null; // Reset result before submitting
 
-    this.ApiService.submitSolut(14 , this.code ,this.AuthService.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] ,this.problemId ).subscribe({
-      next: (result) => {
+    this.ApiService.submitSolut(
+      14, // languageId for TypeScript
+      this.code,
+      this.AuthService.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+      this.problemId
+    ).subscribe({
+      next: (result: SubmissionResult) => {
+        this.result = result; // Bind response to result for UI display
         this.isSubmitting = false;
-        this.showMessage('Solution submitted successfully');
+        this.showMessage(result.success ? 'Solution submitted successfully' : 'Solution failed');
       },
       error: (error) => {
-        this.showMessage('Error submitting solution: ' + error.message);
+        this.showMessage('Error submitting solution: ' + (error.message || 'Unknown error'));
         this.isSubmitting = false;
       }
-    })
-   
+    });
   }
 
   getDifficultyLabel(level: DifficultyLevel): string {

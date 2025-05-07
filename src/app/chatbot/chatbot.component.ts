@@ -16,12 +16,12 @@ import { ApiService } from '../services/api.service';
 export class ChatbotComponent {
   userInput: string = '';
   responseHtml: string = '';
-  isChatbotVisible: boolean = false; 
+  isChatbotVisible: boolean = false;
 
   constructor(private http: HttpClient) {}
 
   toggleChatbot(): void {
-    this.isChatbotVisible = !this.isChatbotVisible; 
+    this.isChatbotVisible = !this.isChatbotVisible;
   }
 
   async sendMessage(): Promise<void> {
@@ -45,7 +45,7 @@ export class ChatbotComponent {
       messages: [{ role: 'user', content: this.userInput }],
     };
 
-    
+
     this.http
       .post<any>('https://openrouter.ai/api/v1/chat/completions', body, { headers })
       .subscribe({
@@ -75,12 +75,12 @@ import { FormsModule } from '@angular/forms';
 export class ChatbotComponent {
   userInput: string = '';
   responseHtml: string = '';
-  isChatbotVisible: boolean = false; 
+  isChatbotVisible: boolean = false;
 
   constructor(private http: HttpClient) {}
 
   toggleChatbot(): void {
-    this.isChatbotVisible = !this.isChatbotVisible; 
+    this.isChatbotVisible = !this.isChatbotVisible;
   }
 
   async sendMessage(): Promise<void> {
@@ -93,7 +93,7 @@ export class ChatbotComponent {
 
     const headers = new HttpHeaders({
       Authorization:
-        'Bearer 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',
+        'Bearer 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',
       'HTTP-Referer': 'https://www.sitename.com',
       'X-Title': 'SiteName',
       'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ export class ChatbotComponent {
       messages: [{ role: 'user', content: this.userInput }],
     };
 
-    
+
     this.http
       .post<any>('https://openrouter.ai/api/v1/chat/completions', body, { headers })
       .subscribe({

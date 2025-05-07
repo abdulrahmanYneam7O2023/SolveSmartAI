@@ -21,19 +21,6 @@ export interface Problem {
   best_Solution: string;
 }
 
-export interface SubmissionResult {
-  success: boolean;
-  message: string;
-  testResults?: {
-    input: string;
-    expected: string;
-    actual: string;
-    passed: boolean;
-  }[];
-  executionTime?: number;
-  memoryUsage?: number;
-}
-
 interface SubmissionRequest {
   languageId: number;
   code: string;
@@ -41,6 +28,31 @@ interface SubmissionRequest {
   problemId: number;
 }
 
+export interface SubmissionResult {
+  success: boolean;
+  message: string;
+  submissionId?: number;
+  aiEvaluation: {
+    isCorrect: boolean;
+    successRate: number;
+    feedback: string;
+    correctSolution: string;
+}
+// export interface SubmissionResult {
+//   success: boolean;
+//   message: string;
+//   testResults?: {
+//     input: string;
+//     expected: string;
+//     actual: string;
+//     passed: boolean;
+//   }[];
+//   executionTime?: number;
+//   memoryUsage?: number;
+// }
+
+
+}
 @Injectable({
   providedIn: 'root'
 })

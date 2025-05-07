@@ -680,3 +680,22 @@
   font-size: 0.875rem;
   color: #495057;
 }
+.evaluation {
+  margin-top: 20px;
+}
+
+.feedback, .correct-solution, .success-rate {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.feedback pre, .correct-solution pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.success-rate p {
+  margin: 0;
+}

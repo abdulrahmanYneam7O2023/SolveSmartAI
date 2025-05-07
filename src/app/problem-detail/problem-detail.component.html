@@ -54,45 +54,28 @@
         </div>
 
         <div class="test-cases" *ngIf="result">
-          <div class="result-card" [ngClass]="{ success: result.success, error: !result.success }">
+          <div class="result-card" [ngClass]="{ success: result.aiEvaluation.isCorrect, error: !result.aiEvaluation.isCorrect }">
             <div class="result-header">
-              <span>{{ result.success ? 'Success' : 'Failed' }}</span>
+              <span>{{ result.aiEvaluation.isCorrect ? 'Success' : 'Failed' }}</span>
               <p>{{ result.message }}</p>
             </div>
 
-            <div *ngIf="result.testResults && result.testResults.length > 0" class="test-results">
-              <div *ngFor="let test of result.testResults" class="test-case-result">
-                <div class="test-input">
-                  <h5>Input:</h5>
-                  <pre>{{ test.input }}</pre>
-                </div>
-                <div class="test-expected">
-                  <h5>Expected Output:</h5>
-                  <pre>{{ test.expected }}</pre>
-                </div>
-                <div class="test-actual">
-                  <h5>Actual Output:</h5>
-                  <pre>{{ test.actual }}</pre>
-                </div>
-                <div class="test-status" [ngClass]="{ 'passed': test.passed, 'failed': !test.passed }">
-                  {{ test.passed ? '✓ Test Passed' : '✗ Test Failed' }}
-                </div>
+            <div class="evaluation">
+              <div class="feedback">
+                <h5>Feedback:</h5>
+                <pre>{{ result.aiEvaluation.feedback }}</pre>
               </div>
-            </div>
-
-            <div class="test-case-metrics">
-              <div *ngIf="result.executionTime !== undefined" class="metric">
-                <span>Execution Time: {{ result.executionTime }} ms</span>
+              <div class="correct-solution" *ngIf="result.aiEvaluation.correctSolution">
+                <h5>Correct Solution:</h5>
+                <pre>{{ result.aiEvaluation.correctSolution }}</pre>
               </div>
-              <div *ngIf="result.memoryUsage !== undefined" class="metric">
-                <span>Memory Usage: {{ result.memoryUsage }} MB</span>
+              <div class="success-rate">
+                <h5>Success Rate:</h5>
+                <p>{{ result.aiEvaluation.successRate }}%</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
   <div class="loading-overlay" *ngIf="isLoading">
     <div class="spinner"></div>

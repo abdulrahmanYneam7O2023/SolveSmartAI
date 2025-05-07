@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { SubmissionResult } from './problem.service';
 import { Problem } from './problem.service';
 import { AuthService } from './auth.service';
 
@@ -71,14 +72,15 @@ export class ApiService {
   }
 
 
-  submitSolut( languageId: number, code: string, userId: string, problemId: number ): Observable<any> {
-    return this.http.post(`${this.baseUrl}/Submission/SubmitCode`, {
-      languageId: languageId,
-      code: code,
-      userId: userId,
-      problemId: problemId
-    })
-    
+//
+submitSolut(languageId: number, code: string, userId: string, problemId: number): Observable<SubmissionResult> {
+  const submission = { languageId, code, userId, problemId };
+  return this.http.post<SubmissionResult>(`${this.baseUrl}/Submission/SubmitCode`, submission, {
+    headers: this.getHeaders()
+  }).pipe(
+    tap(response => console.log('Solution submitted:', response)),
+    catchError(this.handleError<SubmissionResult>('submitSolut'))
+  );
 }
       // updateProblem(id: number, problem: Problem): Observable<Problem> {
       //     return this.http.post<any>(`${this.baseUrl}/Problem/updateProblem/${id}`, problem, {
