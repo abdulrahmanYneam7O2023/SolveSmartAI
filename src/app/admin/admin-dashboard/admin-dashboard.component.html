@@ -1,4 +1,4 @@
-<div class="admin-dashboard-container">
+<!-- <div class="admin-dashboard-container">
   <div class="dashboard-header">
     <h1 class="dashboard-title">Admin Dashboard</h1>
     <p class="dashboard-subtitle">Manage platform content and users</p>
@@ -56,4 +56,76 @@
       </div>
     </div>
   </div>
+</div> -->
+
+
+<div class="admin-dashboard-container">
+  <div class="dashboard-header">
+    <h1 class="dashboard-title">Settings</h1>
+    <p class="dashboard-subtitle">Manage platform content and users</p>
+  </div>
+
+  <div class="dashboard-modules">
+    <table class="modules-table">
+      <thead>
+        <tr>
+          <th>Module</th>
+          <th>Description</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let module of adminModules">
+          <tr *ngIf="!module.adminOnly || (module.adminOnly && isAdmin())" [ngClass]="{'admin-only': module.adminOnly}">
+            <td>
+              <span [ngClass]="module.color">{{ module.title }}</span>
+            </td>
+            <td>{{ module.description }}</td>
+            <td>
+              <a [routerLink]="module.route" class="action-link">
+                <span>Open</span>
+                <mat-icon>arrow_forward</mat-icon>
+              </a>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="quick-stats">
+    <h2 class="section-title">Quick Statistics</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon primary">
+          <mat-icon>code</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">120</h3>
+          <p class="stat-label">Coding Problems</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon accent">
+          <mat-icon>people</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">1,250</h3>
+          <p class="stat-label">Registered Users</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon warn">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">8,540</h3>
+          <p class="stat-label">حل مقدم</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+

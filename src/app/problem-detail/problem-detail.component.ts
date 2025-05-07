@@ -19,24 +19,24 @@ export class ProblemDetailComponent implements OnInit {
   problem: Problem | null = null;
   problemId: number = 0;
   code: string = '';
-  selectedLanguage: string = 'javascript';
+  selectedLanguage: string = '14';
   isRunning: boolean = false;
   isSubmitting: boolean = false;
   isLoading: boolean = false;
   result: SubmissionResult | null = null;
 
-  languages = [
-    { value: '14', label: 'TypeScript' },
+  languages: { value: string; label: string }[] = [];
 
-  ];
 
   constructor(
     private route: ActivatedRoute,
     private problemService: ProblemService,
     private snackBar: MatSnackBar,
-    private ApiService: ApiService,
-    private AuthService: AuthService,
-  ) { }
+    private apiService: ApiService,
+    private authService: AuthService,
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -44,6 +44,7 @@ export class ProblemDetailComponent implements OnInit {
       console.log('Problem ID:', this.problemId);
     })
     this.loadProblem();
+    this.loadLanguages();
   }
 
   loadProblem(): void {
@@ -56,6 +57,22 @@ export class ProblemDetailComponent implements OnInit {
       error: (error) => {
         this.showMessage('Error loading problem: ' + error.message);
         this.isLoading = false;
+      }
+    });
+  }
+  loadLanguages(): void {
+    this.apiService.getLanguages().subscribe({
+      next: (languages: any[]) => { // Assuming API returns array of { languagesId, name }
+        this.languages = languages.map(lang => ({
+          value: lang.languagesId.toString(), // Convert to string to match [value] in HTML
+          label: lang.name
+        }));
+        if (this.languages.length > 0 && !this.languages.some(l => l.value === this.selectedLanguage)) {
+          this.selectedLanguage = this.languages[0].value; // Set default to first language if current selection is invalid
+        }
+      },
+      error: (error) => {
+        this.showMessage('Error loading languages: ' + error.message);
       }
     });
   }
@@ -117,10 +134,10 @@ export class ProblemDetailComponent implements OnInit {
     this.isSubmitting = true;
     this.result = null; // Reset result before submitting
 
-    this.ApiService.submitSolut(
-      14, // languageId for TypeScript
+    this.apiService.submitSolut(
+      parseInt(this.selectedLanguage), // languageId for TypeScript
       this.code,
-      this.AuthService.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
+      this.authService.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'],
       this.problemId
     ).subscribe({
       next: (result: SubmissionResult) => {
@@ -143,6 +160,11 @@ export class ProblemDetailComponent implements OnInit {
       [DifficultyLevel.VeryHard]: 'Very Hard'
     };
     return labels[level] || 'Unknown';
+  }
+
+  private getLanguageName(languageId: string): string {
+    const lang = this.languages.find(l => l.value === languageId);
+    return lang ? lang.label.toLowerCase() : 'javascript'; // Default to 'javascript' if not found
   }
 
   private showMessage(message: string): void {

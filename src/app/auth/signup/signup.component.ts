@@ -8,25 +8,27 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, RouterLink, CommonModule,ReactiveFormsModule],
+  imports: [FormsModule, RouterLink, CommonModule, ReactiveFormsModule],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent {
+  signUpForm!: FormGroup;
+  isCalingApi: boolean = false;
+  loginIsSuccess: boolean = false;
 
-  signUpForm!:FormGroup
-  isCalingApi:boolean = false
-  loginIsSuccess:boolean = false
-
-  constructor( private _formBuilder : FormBuilder , private _AuthService : AuthService  , private _router : Router) {
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _AuthService: AuthService,
+    private _router: Router
+  ) {
     this.signUpForm = this._formBuilder.group({
-      userName: ['' , [Validators.required , Validators.minLength(3)]],
+      userName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required]],
-      password: ['', [Validators.required , Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/)]] ,
-      phoneNumber   : ['', [Validators.required , Validators.pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)]]
-    })
+      password: ['', [Validators.required, Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/)]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/)]]
+    });
   }
-
 
   onSubmit() {
     this.isCalingApi = true;
@@ -38,7 +40,7 @@ export class SignupComponent {
           this.loginIsSuccess = true;
           setTimeout(() => {
             this._router.navigate(['/signin']);
-          },500);
+          }, 500);
           console.log(res);
         },
         error: (error) => {
@@ -46,16 +48,9 @@ export class SignupComponent {
           console.log(error);
         }
       });
-    }else{
+    } else {
       this.isCalingApi = false;
       this.signUpForm.markAllAsTouched();
     }
-
-
-
   }
-
-
-
 }
-

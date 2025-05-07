@@ -150,7 +150,7 @@ submitSolut(languageId: number, code: string, userId: string, problemId: number)
 
   updateLanguage(id: number, language: { languagesId: number; name: string }): Observable<any> {
     return this.http
-      .post<any>(`${this.baseUrl}/Languages/updateLanguage/${id}`, language, { headers: this.getHeaders() })
+      .put<any>(`${this.baseUrl}/Languages/updateLanguage/${id}`, language, { headers: this.getHeaders() })
       .pipe(
         tap(response => console.log(`Language ${id} updated:`, response)),
         catchError(this.handleError<any>(`updateLanguage id=${id}`))

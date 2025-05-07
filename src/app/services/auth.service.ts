@@ -6,6 +6,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { UserData } from '../shared/interfaces/user-data';
+import { jwtDecode } from 'jwt-decode';
 
 interface AuthResponse {
   token: string;
@@ -42,6 +43,7 @@ export class AuthService {
         console.log('Registration successful:', response);
         if (response.token) {
           this.setAuthToken(response.token);
+          this.userData = jwtDecode(response.token);
           this.isAuthenticatedSubject.next(true);
         }
       }),
@@ -54,6 +56,8 @@ export class AuthService {
       tap(response => {
         if (response && response.token) {
           this.setAuthToken(response.token);
+          this.userData = jwtDecode(response.token);
+          console.log('Decoded UserData:', this.userData);
           this.isAuthenticatedSubject.next(true);
         }
       }),
@@ -66,6 +70,7 @@ export class AuthService {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
       this.isAuthenticatedSubject.next(false);
+      this.userData = undefined as any;
       this.router.navigate(['/signin']);
     }
   }
@@ -86,8 +91,37 @@ export class AuthService {
   private checkAuthStatus(): void {
     if (isPlatformBrowser(this._PLATFORM_ID)) {
       const token = localStorage.getItem('token');
-      this.isAuthenticatedSubject.next(!!token);
+      if (token) {
+        this.userData = jwtDecode(token); // تحديث userData عند التحقق من الحالة
+        this.isAuthenticatedSubject.next(true);
+      } else {
+        this.isAuthenticatedSubject.next(false);
+      }
     }
+  }
+  getDecodedToken(): any {
+    const token = this.getAuthToken();
+    if (token && isPlatformBrowser(this._PLATFORM_ID)) {
+      try {
+        return jwtDecode(token);
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        return null;
+      }
+    }
+    return null;
+  }
+
+  isAdmin(): boolean {
+    if (this.userData) {
+      const role = this.userData['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      return role === 'Manager';
+
+      // أو يمكنك التحقق من المعرف الصحيح
+      // const userId = this.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+      // return userId === '9a5ce35a-634a-438f-aef9-9c905baf28cc'; // استبدل 'admin-id-123' بالـ ID الحقيقي
+    }
+    return false;
   }
 
   private handleError(error: HttpErrorResponse) {

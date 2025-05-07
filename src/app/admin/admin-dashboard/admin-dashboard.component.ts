@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -18,7 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.css'],
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
   adminModules = [
     {
       title: 'Problem Management',
@@ -26,6 +27,7 @@ export class AdminDashboardComponent {
       icon: 'code',
       route: '/admin/problems',
       color: 'primary',
+      adminOnly: true,
     },
     {
       title: 'Language Management',
@@ -33,6 +35,7 @@ export class AdminDashboardComponent {
       icon: 'language',
       route: '/admin/languages',
       color: 'accent',
+      adminOnly: true,
     },
     {
       title: 'User Statistics',
@@ -40,13 +43,15 @@ export class AdminDashboardComponent {
       icon: 'bar_chart',
       route: '/admin/statistics',
       color: 'accent',
-    },
-    {
-      title: 'User Management',
-      description: 'Manage user accounts and permissions',
-      icon: 'people',
-      route: '/admin/users',
-      color: 'warn',
+      adminOnly: false,
     },
   ];
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {}
+
+  isAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 }

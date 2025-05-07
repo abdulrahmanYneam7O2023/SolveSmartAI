@@ -61,15 +61,60 @@ export class LanguageManagementComponent implements OnInit {
       return;
     }
 
-    const languageData = this.addLanguageForm.value;
+  //   const languageData = this.addLanguageForm.value;
+
+  //   if (this.editMode && this.currentLanguageId !== null) {
+  //     // وضع التعديل
+  //     this.apiService.updateLanguage(this.currentLanguageId, languageData).subscribe({
+  //       next: (response) => {
+  //         const index = this.languages.findIndex((l) => l.languagesId === this.currentLanguageId);
+  //         if (index !== -1) {
+  //           this.languages[index] = response;
+  //           this.languages = [...this.languages]; // تحديث القائمة
+  //         }
+  //         this.showSnackBar('Language updated successfully');
+  //         this.resetForm();
+  //       },
+  //       error: (error) => {
+  //         console.error('Error updating language:', error);
+  //         this.showSnackBar('Failed to update language');
+  //       },
+  //     });
+  //   } else {
+  //     // وضع الإضافة
+  //     this.apiService.addLanguage(languageData).subscribe({
+  //       next: (response) => {
+  //         this.languages = [...this.languages, response]; // إضافة اللغة الجديدة
+  //         this.showSnackBar('Language added successfully');
+  //         this.resetForm();
+  //       },
+  //       error: (error) => {
+  //         console.error('Error adding language:', error);
+  //         this.showSnackBar('Failed to add language');
+  //       },
+  //     });
+  //   }
+  // }
+
+  // // تحرير لغة
+  // editLanguage(language: Language): void {
+  //   this.editMode = true;
+  //   this.currentLanguageId = language.languagesId;
+  //   this.addLanguageForm.patchValue({
+  //     name: language.name,
+  //     languagesId: language.languagesId,
+  //   });
+  // }
+
+  const languageData = this.addLanguageForm.value;
 
     if (this.editMode && this.currentLanguageId !== null) {
       // وضع التعديل
-      this.apiService.updateLanguage(this.currentLanguageId, languageData).subscribe({
-        next: (response) => {
+      this.apiService.updateLanguage(this.currentLanguageId, { languagesId: this.currentLanguageId, name: languageData.name }).subscribe({
+        next: (updatedLanguage: Language) => {
           const index = this.languages.findIndex((l) => l.languagesId === this.currentLanguageId);
           if (index !== -1) {
-            this.languages[index] = response;
+            this.languages[index] = updatedLanguage; // تحديث اللغة المعدّلة
             this.languages = [...this.languages]; // تحديث القائمة
           }
           this.showSnackBar('Language updated successfully');
@@ -82,8 +127,8 @@ export class LanguageManagementComponent implements OnInit {
       });
     } else {
       // وضع الإضافة
-      this.apiService.addLanguage(languageData).subscribe({
-        next: (response) => {
+      this.apiService.addLanguage({ languagesId: 0, name: languageData.name }).subscribe({
+        next: (response: Language) => {
           this.languages = [...this.languages, response]; // إضافة اللغة الجديدة
           this.showSnackBar('Language added successfully');
           this.resetForm();
@@ -105,6 +150,7 @@ export class LanguageManagementComponent implements OnInit {
       languagesId: language.languagesId,
     });
   }
+  
 
   // حذف لغة
   deleteLanguage(id: number): void {
