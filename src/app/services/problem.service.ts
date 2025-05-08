@@ -27,17 +27,31 @@ interface SubmissionRequest {
   userId: string;
   problemId: number;
 }
-
-export interface SubmissionResult {
-  success: boolean;
-  message: string;
-  submissionId?: number;
+export interface UserSubmission {
+  sId: number;
+  isSuccesfull: boolean;
+  submissionTime: string;
+  problemId: number;
+  problemTitle: string;
+  language: string;
+  successRate: number;
   aiEvaluation: {
     isCorrect: boolean;
-    successRate: number;
     feedback: string;
     correctSolution: string;
+  }
 }
+
+  export interface SubmissionResult {
+    success: boolean;
+    message: string;
+    submissionId?: number;
+    aiEvaluation: {
+      isCorrect: boolean;
+      successRate: number;
+      feedback: string;
+      correctSolution: string;
+  }
 // export interface SubmissionResult {
 //   success: boolean;
 //   message: string;

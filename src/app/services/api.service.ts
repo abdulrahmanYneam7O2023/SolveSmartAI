@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { SubmissionResult } from './problem.service';
+import { SubmissionResult ,UserSubmission } from './problem.service';
 import { Problem } from './problem.service';
 import { AuthService } from './auth.service';
 
@@ -25,6 +25,20 @@ export class ApiService {
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': `Bearer ${token}` } : {})
     });
+  }
+  getUserSubmissions(): Observable<UserSubmission[]> {
+    const userId = this.authService.userData['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'];
+
+    if (!userId) {
+      return throwError(() => new Error('User ID not available'));
+    }
+
+    return this.http.get<UserSubmission[]>(`${this.baseUrl}/Submission/GetUserSubmissions?userId=${userId}`, {
+      headers: this.getHeaders()
+    }).pipe(
+      tap(submissions => console.log('User submissions fetched:', submissions)),
+      catchError(this.handleError<UserSubmission[]>('getUserSubmissions', []))
+    );
   }
 
   getProblems(): Observable<Problem[]> {

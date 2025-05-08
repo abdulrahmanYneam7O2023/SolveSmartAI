@@ -76,6 +76,13 @@ export const routes: Routes = [
               ),
           },
           {
+            path: 'statistics',
+            loadComponent: () =>
+              import('./admin/user-statistics/user-statistics.component').then(
+                (c) => c.UserStatisticsComponent
+              ),
+          },
+          {
             path: 'languages',
             loadComponent: () =>
               import('./admin/language-management/language-management.component').then(

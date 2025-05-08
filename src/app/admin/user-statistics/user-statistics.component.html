@@ -1,0 +1,292 @@
+<div class="container py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h1 class="mb-2">User Statistics</h1>
+      <p class="text-muted">Track your coding progress and submission history</p>
+    </div>
+  </div>
+
+  <!-- بطاقات الإحصائيات -->
+  <div class="row mb-5">
+    <div class="col-md-4 mb-3">
+      <div class="card stat-card h-100">
+        <div class="card-body d-flex align-items-center">
+          <div class="stat-icon bg-primary text-white">
+            <i class="fas fa-code"></i>
+          </div>
+          <div>
+            <h3 class="card-title mb-0">{{totalSubmissions}}</h3>
+            <p class="card-text text-muted">Total Submissions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card stat-card h-100">
+        <div class="card-body d-flex align-items-center">
+          <div class="stat-icon bg-success text-white">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div>
+            <h3 class="card-title mb-0">{{correctSubmissions}}</h3>
+            <p class="card-text text-muted">Correct Solutions</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+      <div class="card stat-card h-100">
+        <div class="card-body d-flex align-items-center">
+          <div class="stat-icon bg-warning text-white">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div>
+            <h3 class="card-title mb-0">{{averageSuccessRate.toFixed(1)}}/10</h3>
+            <p class="card-text text-muted">Avg. Success Rate</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- جدول التقديمات -->
+  <div class="card submissions-table">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <h2 class="mb-0">Submission History</h2>
+      <div class="d-flex align-items-center">
+        <label for="pageSize" class="me-2 mb-0">Show:</label>
+        <select id="pageSize" class="form-select form-select-sm" style="width: 80px;" (change)="changePageSize($event)">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="card-body p-0">
+      <!-- حالة التحميل -->
+      <div *ngIf="isLoading" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3">Loading submissions...</p>
+      </div>
+
+      <!-- حالة الخطأ -->
+      <div *ngIf="error" class="text-center py-5">
+        <div class="text-danger mb-3">
+          <i class="fas fa-exclamation-circle fa-3x"></i>
+        </div>
+        <p class="text-danger">{{error}}</p>
+        <button class="btn btn-primary" (click)="loadSubmissions()">Try Again</button>
+      </div>
+
+      <!-- حالة عدم وجود بيانات -->
+      <div *ngIf="!isLoading && !error && submissions.length === 0" class="text-center py-5">
+        <div class="text-muted mb-3">
+          <i class="fas fa-code fa-3x"></i>
+        </div>
+        <h3>No submissions yet</h3>
+        <p class="text-muted">Start solving problems to see your statistics here</p>
+      </div>
+
+      <!-- الجدول -->
+      <div *ngIf="!isLoading && !error && submissions.length > 0" class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th (click)="sortSubmissions('sId')" class="sortable">
+                ID
+                <i *ngIf="sortColumn === 'sId'"
+                   class="fas ms-1"
+                   [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+              </th>
+              <th (click)="sortSubmissions('isSuccesfull')" class="sortable">
+                Status
+                <i *ngIf="sortColumn === 'isSuccesfull'"
+                   class="fas ms-1"
+                   [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+              </th>
+              <th (click)="sortSubmissions('isCorrect')" class="sortable">
+                Correctness
+                <i *ngIf="sortColumn === 'isCorrect'"
+                   class="fas ms-1"
+                   [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+              </th>
+              <th (click)="sortSubmissions('successRate')" class="sortable">
+                Success Rate
+                <i *ngIf="sortColumn === 'successRate'"
+                   class="fas ms-1"
+                   [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
+              </th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let submission of filteredSubmissions">
+              <td>#{{submission.sId || 'N/A'}}</td>
+              <td>
+                <span class="badge" [ngClass]="submission.isSuccesfull ? 'bg-success' : 'bg-danger'">
+                  <i class="fas me-1" [ngClass]="submission.isSuccesfull ? 'fa-check' : 'fa-times'"></i>
+                  {{submission.isSuccesfull ? 'Success' : 'Failed'}}
+                </span>
+              </td>
+              <td>
+                <span class="badge" [ngClass]="submission.aiEvaluation.isCorrect ? 'bg-success' : 'bg-danger'">
+                  <i class="fas me-1" [ngClass]="submission.aiEvaluation.isCorrect ? 'fa-check' : 'fa-times'"></i>
+                  {{submission.aiEvaluation.isCorrect ? 'Correct' : 'Incorrect'}}
+                </span>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="progress flex-grow-1 me-2">
+                    <div class="progress-bar"
+                         [ngClass]="{'bg-success': submission.successRate >= 7,
+                                    'bg-warning': submission.successRate >= 4 && submission.successRate < 7,
+                                    'bg-danger': submission.successRate < 4}"
+                         [style.width.%]="submission.successRate * 10">
+                      {{submission.successRate}}/10
+                    </div>
+                  </div>
+                  <small class="text-muted">{{(submission.successRate * 10).toFixed(0)}}%</small>
+                </div>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary" (click)="showSubmissionDetails(submission)">
+                  <i class="fas fa-info-circle me-1"></i> Details
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- الترقيم الصفحي -->
+      <div *ngIf="!isLoading && !error && submissions.length > 0" class="d-flex justify-content-between align-items-center p-3 border-top">
+        <div class="text-muted">
+          Showing {{(currentPage - 1) * pageSize + 1}} to {{Math.min(currentPage * pageSize, submissions.length)}} of {{submissions.length}} entries
+        </div>
+        <nav aria-label="Page navigation">
+          <ul class="pagination mb-0">
+            <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+              <a class="page-link" (click)="changePage(1)"><i class="fas fa-angle-double-left"></i></a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+              <a class="page-link" (click)="changePage(currentPage - 1)"><i class="fas fa-angle-left"></i></a>
+            </li>
+            <li *ngFor="let page of getPageNumbers()" class="page-item" [ngClass]="{'active': page === currentPage}">
+              <a class="page-link" (click)="changePage(page)">{{page}}</a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+              <a class="page-link" (click)="changePage(currentPage + 1)"><i class="fas fa-angle-right"></i></a>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+              <a class="page-link" (click)="changePage(totalPages)"><i class="fas fa-angle-double-right"></i></a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- مودال تفاصيل التقديم -->
+<div *ngIf="selectedSubmission" class="modal fade show" tabindex="-1" style="display: block;">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Submission Details</h5>
+        <button type="button" class="btn-close" (click)="closeSubmissionDetails()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-4">
+          <h4 class="mb-2">Submission #{{selectedSubmission.sId || 'N/A'}}</h4>
+          <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+            <span class="badge bg-light text-dark">
+              <i class="fas fa-calendar-alt me-1"></i>
+              {{selectedSubmission.submissionTime | date:'medium'}}
+            </span>
+            <span class="badge" [ngClass]="selectedSubmission.isSuccesfull ? 'bg-success' : 'bg-danger'">
+              <i class="fas me-1" [ngClass]="selectedSubmission.isSuccesfull ? 'fa-check' : 'fa-times'"></i>
+              {{selectedSubmission.isSuccesfull ? 'Success' : 'Failed'}}
+            </span>
+            <span class="badge" [ngClass]="selectedSubmission.aiEvaluation.isCorrect ? 'bg-success' : 'bg-danger'">
+              <i class="fas me-1" [ngClass]="selectedSubmission.aiEvaluation.isCorrect ? 'fa-check' : 'fa-times'"></i>
+              {{selectedSubmission.aiEvaluation.isCorrect ? 'Correct' : 'Incorrect'}}
+            </span>
+            <span class="badge bg-info">
+              <i class="fas fa-star me-1"></i>
+              Score: {{selectedSubmission.successRate}}/10
+            </span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="row">
+            <div class="col-md-6 mb-3 mb-md-0">
+              <h5 class="mb-2">Problem Details</h5>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <p class="mb-1"><strong>Title:</strong> {{selectedSubmission.problemTitle}}</p>
+                  <p class="mb-1"><strong>ID:</strong> {{selectedSubmission.problemId}}</p>
+                  <p class="mb-0"><strong>Language:</strong> {{selectedSubmission.language}}</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h5 class="mb-2">Submission Summary</h5>
+              <div class="card bg-light">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between mb-2">
+                    <span>Success Rate:</span>
+                    <strong>{{selectedSubmission.successRate}}/10</strong>
+                  </div>
+                  <div class="progress mb-3">
+                    <div class="progress-bar"
+                         [ngClass]="{'bg-success': selectedSubmission.successRate >= 7,
+                                    'bg-warning': selectedSubmission.successRate >= 4 && selectedSubmission.successRate < 7,
+                                    'bg-danger': selectedSubmission.successRate < 4}"
+                         [style.width.%]="selectedSubmission.successRate * 10">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h5 class="mb-3">AI Evaluation</h5>
+          <div class="card">
+            <div class="card-body">
+              <div class="alert" [ngClass]="selectedSubmission.aiEvaluation.isCorrect ? 'alert-success' : 'alert-danger'">
+                <i class="fas me-2" [ngClass]="selectedSubmission.aiEvaluation.isCorrect ? 'fa-check-circle' : 'fa-exclamation-circle'"></i>
+                {{selectedSubmission.aiEvaluation.isCorrect ? 'Your solution is correct!' : 'Your solution needs improvement'}}
+              </div>
+              <h6 class="mt-3">Feedback:</h6>
+              <div class="p-3 bg-light rounded">
+                <p class="mb-0">{{selectedSubmission.aiEvaluation.feedback}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4" *ngIf="!selectedSubmission.aiEvaluation.isCorrect">
+          <h5 class="mb-3">Suggested Solution</h5>
+          <div class="card">
+            <div class="card-body">
+              <pre class="m-0"><code class="language-typescript">{{selectedSubmission.aiEvaluation.correctSolution}}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeSubmissionDetails()">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal-backdrop fade show"></div>
+</div>
