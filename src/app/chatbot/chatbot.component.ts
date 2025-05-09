@@ -83,6 +83,11 @@ export class ChatbotComponent {
     this.isChatbotVisible = !this.isChatbotVisible;
   }
 
+  onInputChange() {}
+
+  private processMessage(input: string): string {
+    return `<div class="message">Response to: ${input}</div>`;
+  }
   async sendMessage(): Promise<void> {
     if (!this.userInput.trim()) {
       this.responseHtml = 'Please enter a message.';

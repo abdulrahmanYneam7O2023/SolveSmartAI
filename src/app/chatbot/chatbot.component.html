@@ -1,21 +1,19 @@
-
-
+<!-- chatbot.component.html -->
 <div class="chatbot-icon" (click)="toggleChatbot()">🤖</div>
-
 
 <div class="chatbot-container" [ngClass]="{ 'show': isChatbotVisible }">
   <div class="chat-header">
     🤖 AI Chatbot
   </div>
-
-  <div class="chat-box" [innerHTML]="responseHtml || 'Waiting for your message...'">
+  <div class="chat-box">
+    <div class="message" [innerHTML]="responseHtml || 'Waiting for your message...'"></div>
   </div>
-
   <div class="chat-input-container">
     <input
       type="text"
       [(ngModel)]="userInput"
       (keydown.enter)="sendMessage()"
+      (ngModelChange)="onInputChange()"
       placeholder="Type your message..."
     />
     <button (click)="sendMessage()">Send</button>

@@ -33,8 +33,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let problem of filteredProblems" (click)="navigateToProblem(problem.id)"
-          class="problem-row">
+        <tr *ngFor="let problem of filteredProblems" (click)="navigateToProblem(problem.id)" class="problem-row">
           <td>
             <div class="problem-title">{{ problem.title }}</div>
             <div class="problem-description">{{ problem.description | slice:0:100 }}{{ problem.description.length > 100
