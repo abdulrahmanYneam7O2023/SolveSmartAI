@@ -79,7 +79,7 @@ export class ApiService {
         problemId: response.id
       })),
       catchError(error => {
-        console.error('Error adding problem:', error);
+        console.error('Error adding problem:', error.message);
         return throwError(() => new Error('Failed to add problem'));
       })
     );
