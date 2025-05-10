@@ -89,6 +89,14 @@ export const routes: Routes = [
                 (c) => c.LanguageManagementComponent
               ),
           },
+         {
+            path: 'ai-problems',
+            loadComponent: () =>
+              import('./admin/problem-ai-management/problem-ai-management.component').then( // تصحيح المسار
+                (c) => c.ProblemAiManagementComponent
+              ),
+            canActivate: [AdminGuard],
+          },
         ],
       },
     ],

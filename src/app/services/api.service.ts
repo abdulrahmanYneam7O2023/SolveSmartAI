@@ -8,9 +8,13 @@ import { SubmissionResult ,UserSubmission } from './problem.service';
 import { Problem } from './problem.service';
 import { AuthService } from './auth.service';
 
+interface ProblemDescription {
+  description: string;
+}
 @Injectable({
   providedIn: 'root'
 })
+
 export class ApiService {
   private baseUrl = environment.apiUrl;
 
@@ -124,7 +128,43 @@ submitSolut(languageId: number, code: string, userId: string, problemId: number)
       })
     );
   }
+  generateProblem(description: ProblemDescription): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/Problem/GenerateProblem`, description, {
+      headers: this.getHeaders()
+    }).pipe(
+      tap(response => console.log('Problem generated:', response)),
+      catchError(error => {
+        console.error('Error generating problem:', error);
+        return throwError(() => new Error('Failed to generate problem'));
+      })
+    );
+  }
 
+  updateProblemWithAI(id: number, description: ProblemDescription): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/Problem/UpdateProblemWithAI/${id}`, description, {
+      headers: this.getHeaders()
+    }).pipe(
+      tap(response => console.log(`Problem ${id} updated with AI:`, response)),
+      catchError(error => {
+        console.error('Error updating problem with AI:', error);
+        return throwError(() => new Error('Failed to update problem with AI'));
+      })
+    );
+  }
+
+  deleteProblemWithAI(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/Problem/DeleteProblemWithAI/${id}`, {
+      headers: this.getHeaders()
+    }).pipe(
+      tap(() => console.log(`Problem ${id} deleted with AI`)),
+      catchError(error => {
+        console.error('Error deleting problem with AI:', error);
+        return throwError(() => new Error('Failed to delete problem with AI'));
+      })
+    );
+  }
+
+  
   // Email methods
   sendEmail(emailData: { userEmail: string; subject: string; message: string }): Observable<any> {
     return this.http
@@ -201,11 +241,12 @@ submitSolut(languageId: number, code: string, userId: string, problemId: number)
         catchError(this.handleError<any>('sendChatMessage'))
       );
   }
+  
 
 
 
   // Error handling
-  private handleError<T>(operation = 'operation', result?: T) {
+ private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.error(`${operation} failed:`, error);
 

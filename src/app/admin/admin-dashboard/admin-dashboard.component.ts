@@ -38,6 +38,14 @@ export class AdminDashboardComponent implements OnInit {
       adminOnly: true,
     },
     {
+      title: 'AI Problem Management',
+      description: 'Generate, update, and delete problems using AI',
+      icon: 'smart_toy',
+      route: '/admin/ai-problems',
+      color: 'warn',
+      adminOnly: true,
+    },
+    {
       title: 'User Statistics',
       description: 'View user statistics and activities',
       icon: 'bar_chart',
@@ -45,6 +53,7 @@ export class AdminDashboardComponent implements OnInit {
       color: 'accent',
       adminOnly: false,
     },
+    
   ];
 
   constructor(private authService: AuthService) {}

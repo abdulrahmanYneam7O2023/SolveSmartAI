@@ -118,6 +118,7 @@ export class LanguageManagementComponent implements OnInit {
             this.languages = [...this.languages]; // تحديث القائمة
           }
           this.showSnackBar('Language updated successfully');
+          this.loadLanguages();
           this.resetForm();
         },
         error: (error) => {
@@ -131,6 +132,7 @@ export class LanguageManagementComponent implements OnInit {
         next: (response: Language) => {
           this.languages = [...this.languages, response]; // إضافة اللغة الجديدة
           this.showSnackBar('Language added successfully');
+           this.loadLanguages();
           this.resetForm();
         },
         error: (error) => {
@@ -144,6 +146,7 @@ export class LanguageManagementComponent implements OnInit {
   // تحرير لغة
   editLanguage(language: Language): void {
     this.editMode = true;
+     
     this.currentLanguageId = language.languagesId;
     this.addLanguageForm.patchValue({
       name: language.name,

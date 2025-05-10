@@ -1,0 +1,127 @@
+<div class="container">
+  <div class="header-section">
+    <h1 class="admin-title">AI Problem Management</h1>
+    <p class="admin-subtitle">Generate, update, and delete problems using AI</p>
+  </div>
+
+  <div class="row">
+    <!-- Generate Problem Form -->
+    <div class="col-md-6">
+      <div class="form-card">
+        <div class="card-header">
+          <h2>Generate New Problem</h2>
+        </div>
+        <div class="card-content">
+          <form [formGroup]="generateForm" (ngSubmit)="generateProblem()">
+            <div class="form-field">
+              <label for="generateDescription">Problem Description</label>
+              <textarea
+                id="generateDescription"
+                formControlName="description"
+                placeholder="Enter a description for the AI to generate a problem (e.g., 'Create a problem about calculating factorial')"
+                rows="4"
+                required
+              ></textarea>
+              <div class="error" *ngIf="generateForm.get('description')?.hasError('required') && generateForm.get('description')?.touched">
+                Description is required
+              </div>
+              <div class="error" *ngIf="generateForm.get('description')?.hasError('minlength') && generateForm.get('description')?.touched">
+                Description must be at least 10 characters
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" [disabled]="generateForm.invalid" class="submit-btn">
+                Generate Problem
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Problems List -->
+    <div class="col-md-6">
+      <div class="list-card">
+        <div class="card-header">
+          <h2>Problems List</h2>
+        </div>
+        <div class="card-content">
+          <div class="table-container">
+            <table class="full-width">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Difficulty</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let problem of problems">
+                  <td>{{ problem.id }}</td>
+                  <td>{{ problem.title }}</td>
+                  <td>
+                    <span class="difficulty-badge" [ngClass]="'level-' + problem.difficultyLevel">
+                      {{ problem.difficultyLevel | difficultyLabel }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="action-btn edit-btn" (click)="selectProblemForUpdate(problem.id)" title="Update Problem with AI">
+                      Update
+                    </button>
+                    <button class="action-btn delete-btn" (click)="deleteProblem(problem.id)" title="Delete Problem">
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div *ngIf="problems.length === 0" class="empty-state">
+              <p>No problems available yet</p>
+              <p class="empty-subtitle">Generate your first problem using the form</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Update Problem Form -->
+  <div class="row" *ngIf="selectedProblemId">
+    <div class="col-md-6">
+      <div class="form-card">
+        <div class="card-header">
+          <h2>Update Problem (ID: {{ selectedProblemId }})</h2>
+        </div>
+        <div class="card-content">
+          <form [formGroup]="updateForm" (ngSubmit)="updateProblem()">
+            <div class="form-field">
+              <label for="updateDescription">New Problem Description</label>
+              <textarea
+                id="updateDescription"
+                formControlName="description"
+                placeholder="Enter a new description for the AI to update the problem"
+                rows="4"
+                required
+              ></textarea>
+              <div class="error" *ngIf="updateForm.get('description')?.hasError('required') && updateForm.get('description')?.touched">
+                Description is required
+              </div>
+              <div class="error" *ngIf="updateForm.get('description')?.hasError('minlength') && updateForm.get('description')?.touched">
+                Description must be at least 10 characters
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="submit" [disabled]="updateForm.invalid" class="submit-btn">
+                Update Problem
+              </button>
+              <button type="button" (click)="selectedProblemId = null" class="cancel-btn">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

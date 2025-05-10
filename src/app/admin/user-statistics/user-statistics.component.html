@@ -98,12 +98,12 @@
         <table class="table table-hover mb-0">
           <thead>
             <tr>
-              <th (click)="sortSubmissions('sId')" class="sortable">
+              <!-- <th (click)="sortSubmissions('sId')" class="sortable">
                 ID
                 <i *ngIf="sortColumn === 'sId'"
                    class="fas ms-1"
                    [ngClass]="sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down'"></i>
-              </th>
+              </th> -->
               <th (click)="sortSubmissions('isSuccesfull')" class="sortable">
                 Status
                 <i *ngIf="sortColumn === 'isSuccesfull'"
@@ -127,7 +127,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let submission of filteredSubmissions">
-              <td>#{{submission.sId || 'N/A'}}</td>
+              <!-- <td>#{{submission.sId || 'N/A'}}</td> -->
               <td>
                 <span class="badge" [ngClass]="submission.isSuccesfull ? 'bg-success' : 'bg-danger'">
                   <i class="fas me-1" [ngClass]="submission.isSuccesfull ? 'fa-check' : 'fa-times'"></i>

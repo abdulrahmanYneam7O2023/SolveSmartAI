@@ -32,7 +32,7 @@ export class ProblemManagementComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.addProblemForm = this.fb.group({
-      title: ['', [Validators.required, Validators.minLength(100)]],
+      title: ['', [Validators.required, Validators.maxLength(30)]],
       description: ['', Validators.required],
       difficultyLevel: [DifficultyLevel.Easy, Validators.required],
       testCaseInput: ['', Validators.required],
@@ -66,7 +66,7 @@ export class ProblemManagementComponent implements OnInit {
 
     const problemData = this.addProblemForm.value;
 
-
+   
       this.apiService.addProblem(problemData).subscribe({
         next: (newProblem) => {
           this.problems = [...this.problems, newProblem];
@@ -78,7 +78,7 @@ export class ProblemManagementComponent implements OnInit {
           this.showSnackBar('Failed to add problem');
         }
       });
-
+    
   }
 
   updateProblem(){
@@ -97,7 +97,7 @@ export class ProblemManagementComponent implements OnInit {
 
   editProblem(problem: Problem , index : number): void {
     this.editMode = true;
-
+  
     this.addProblemForm.patchValue({
       title: problem.title,
       description: problem.description,
@@ -107,8 +107,8 @@ export class ProblemManagementComponent implements OnInit {
       constraints: problem.constraints,
       best_Solution: problem.best_Solution
     });
-
-
+   
+    
     this.problemId = this.problems[index].id.toString();
   }
 
