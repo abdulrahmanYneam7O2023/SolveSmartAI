@@ -72,14 +72,13 @@ export class ProblemAiManagementComponent implements OnInit {
     this.selectedProblemId = id;
     this.updateForm.reset();
   }
-
-  updateProblem(): void {
+updateProblem(): void {
     if (this.updateForm.invalid || !this.selectedProblemId) {
       this.showSnackBar('Please provide a valid description and select a problem');
       return;
     }
 
-    const descriptionData: ProblemDescription = this.generateForm.value;
+    const descriptionData: ProblemDescription = this.updateForm.value; // تعديل هنا
     this.problemAiService.updateProblemWithAI(this.selectedProblemId, descriptionData).subscribe({
       next: (response: any) => {
         this.showSnackBar(response.message);
